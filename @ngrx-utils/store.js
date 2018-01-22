@@ -14,7 +14,13 @@ class NgrxSelect {
         NgrxSelect.store = store$$1;
     }
 }
+/**
+ * \@internal
+ */
 NgrxSelect.store = undefined;
+/**
+ * \@internal
+ */
 NgrxSelect.selectorMap = {};
 NgrxSelect.decorators = [
     { type: Injectable },
@@ -29,7 +35,7 @@ NgrxSelect.ctorParameters = () => [];
 function Select(selectorOrFeature, ...paths) {
     return function (target, name) {
         let /** @type {?} */ fn;
-        // Nothing here? Use propery name as selector
+        // Nothing here? Use property name as selector
         if (!selectorOrFeature) {
             selectorOrFeature = name;
         }

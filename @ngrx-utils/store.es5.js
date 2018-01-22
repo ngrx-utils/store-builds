@@ -16,7 +16,13 @@ var NgrxSelect = /** @class */ (function () {
     };
     return NgrxSelect;
 }());
+/**
+ * \@internal
+ */
 NgrxSelect.store = undefined;
+/**
+ * \@internal
+ */
 NgrxSelect.selectorMap = {};
 NgrxSelect.decorators = [
     { type: Injectable },
@@ -35,7 +41,7 @@ function Select(selectorOrFeature) {
     }
     return function (target, name) {
         var /** @type {?} */ fn;
-        // Nothing here? Use propery name as selector
+        // Nothing here? Use property name as selector
         if (!selectorOrFeature) {
             selectorOrFeature = name;
         }
