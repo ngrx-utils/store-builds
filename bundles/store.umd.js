@@ -1,8 +1,8 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@ngrx/store')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@ngrx/store'], factory) :
-	(factory((global.ngrxUtils = global.ngrxUtils || {}, global.ngrxUtils.store = {}),global.ng.core,global.ngrx.store));
-}(this, (function (exports,core,store) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/operator/map'), require('rxjs/operator/pluck'), require('rxjs/operator/distinctUntilChanged')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', 'rxjs/operator/map', 'rxjs/operator/pluck', 'rxjs/operator/distinctUntilChanged'], factory) :
+	(factory((global.ngrxUtils = global.ngrxUtils || {}, global.ngrxUtils.store = {}),global.ng.core,global.map,global.pluck,global.distinctUntilChanged));
+}(this, (function (exports,core,map,pluck,distinctUntilChanged) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -15,8 +15,8 @@ var NgrxSelect = /** @class */ (function () {
      * @param {?} store
      * @return {?}
      */
-    NgrxSelect.prototype.connect = function (store$$1) {
-        NgrxSelect.store = store$$1;
+    NgrxSelect.prototype.connect = function (store) {
+        NgrxSelect.store = store;
     };
     return NgrxSelect;
 }());
@@ -24,69 +24,50 @@ var NgrxSelect = /** @class */ (function () {
  * \@internal
  */
 NgrxSelect.store = undefined;
-/**
- * \@internal
- */
-NgrxSelect.selectorMap = {};
 NgrxSelect.decorators = [
     { type: core.Injectable },
 ];
 /** @nocollapse */
 NgrxSelect.ctorParameters = function () { return []; };
 /**
- * @param {?=} selectorOrFeature
+ * @template T, K
+ * @param {?=} pathOrMapFn
  * @param {...?} paths
  * @return {?}
  */
-function Select(selectorOrFeature) {
+function Select(pathOrMapFn) {
     var paths = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         paths[_i - 1] = arguments[_i];
     }
     return function (target, name) {
-        var /** @type {?} */ fn;
-        // Nothing here? Use property name as selector
-        if (!selectorOrFeature) {
-            selectorOrFeature = name;
+        var /** @type {?} */ mapped$;
+        var /** @type {?} */ source$ = NgrxSelect.store;
+        if (!source$) {
+            throw new Error('NgrxSelect not connected to store!');
         }
-        // Handle string vs Selector<any, any>
-        if (typeof selectorOrFeature === 'string') {
-            var /** @type {?} */ propsArray = paths.length ? [selectorOrFeature].concat(paths) : selectorOrFeature.split('.');
-            fn = getSelector(propsArray);
+        if (!pathOrMapFn) {
+            pathOrMapFn = name;
+        }
+        if (typeof pathOrMapFn === 'string') {
+            mapped$ = pluck.pluck.call.apply(pluck.pluck, [source$, pathOrMapFn].concat(paths));
+        }
+        else if (typeof pathOrMapFn === 'function') {
+            mapped$ = map.map.call(source$, pathOrMapFn);
         }
         else {
-            fn = selectorOrFeature;
+            throw new TypeError("Unexpected type '" + typeof pathOrMapFn + "' in select operator," + " expected 'string' or 'function'");
         }
-        // Redefine property
         if (delete target[name]) {
             Object.defineProperty(target, name, {
                 get: function () {
-                    // get connected store
-                    var /** @type {?} */ store$$1 = NgrxSelect.store;
-                    if (!store$$1) {
-                        throw new Error('NgrxSelect not connected to store!');
-                    }
-                    return store$$1.select(fn);
+                    return distinctUntilChanged.distinctUntilChanged.call(mapped$);
                 },
                 enumerable: true,
                 configurable: true
             });
         }
     };
-}
-/**
- * @param {?} paths
- * @return {?}
- */
-function getSelector(paths) {
-    var /** @type {?} */ selectorMap = NgrxSelect.selectorMap;
-    var /** @type {?} */ key = paths.join('.');
-    var /** @type {?} */ cachedSelector = selectorMap[key];
-    if (cachedSelector)
-        return cachedSelector;
-    var featureName = paths[0], propNames = paths.slice(1);
-    var /** @type {?} */ getFeature = store.createFeatureSelector(featureName);
-    return (selectorMap[key] = propNames.reduce(function (selected, prop) { return store.createSelector(selected, function (state) { return state[prop]; }); }, getFeature));
 }
 /**
  * @fileoverview added by tsickle
