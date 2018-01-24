@@ -1,7 +1,5 @@
-import { Injectable, NgModule } from '@angular/core';
-import { map as map$1 } from 'rxjs/operator/map';
-import { pluck as pluck$1 } from 'rxjs/operator/pluck';
-import { distinctUntilChanged as distinctUntilChanged$1 } from 'rxjs/operator/distinctUntilChanged';
+import { NgModule, Injectable } from '@angular/core';
+import { select } from '@ngrx/store';
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -27,50 +25,6 @@ NgrxSelect.decorators = [
 ];
 /** @nocollapse */
 NgrxSelect.ctorParameters = function () { return []; };
-/**
- * @template T, K
- * @param {?=} pathOrMapFn
- * @param {...?} paths
- * @return {?}
- */
-function Select(pathOrMapFn) {
-    var paths = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        paths[_i - 1] = arguments[_i];
-    }
-    return function (target, name) {
-        var /** @type {?} */ mapped$;
-        var /** @type {?} */ source$ = NgrxSelect.store;
-        if (!source$) {
-            throw new Error('NgrxSelect not connected to store!');
-        }
-        if (!pathOrMapFn) {
-            pathOrMapFn = name;
-        }
-        if (typeof pathOrMapFn === 'string') {
-            mapped$ = pluck$1.call.apply(pluck$1, [source$, pathOrMapFn].concat(paths));
-        }
-        else if (typeof pathOrMapFn === 'function') {
-            mapped$ = map$1.call(source$, pathOrMapFn);
-        }
-        else {
-            throw new TypeError("Unexpected type '" + typeof pathOrMapFn + "' in select operator," + " expected 'string' or 'function'");
-        }
-        if (delete target[name]) {
-            Object.defineProperty(target, name, {
-                get: function () {
-                    return distinctUntilChanged$1.call(mapped$);
-                },
-                enumerable: true,
-                configurable: true
-            });
-        }
-    };
-}
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
 var NgrxUtilsModule = /** @class */ (function () {
     function NgrxUtilsModule() {
     }
@@ -88,6 +42,105 @@ NgrxUtilsModule.ctorParameters = function () { return []; };
  * @suppress {checkTypes} checked by tsc
  */
 /**
+ * Select decorator act like pipe operator of Observable
+ * except the first parameter is a selector to select a piece
+ * of state from \@ngrx/store and you won't be able to subscribe to it
+ * \@example
+ * export class MyComponent {
+ *   \@Select(fromStore.getAuth, take(1))
+ *   isAuth: Observable<boolean>
+ * }
+ * @template A, B
+ * @param {?} mapFn
+ * @param {...?} operations
+ * @return {?}
+ */
+function Select(mapFn) {
+    var operations = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        operations[_i - 1] = arguments[_i];
+    }
+    return function (target, name) {
+        if (typeof mapFn !== 'function') {
+            throw new TypeError("Unexpected type '" + typeof mapFn + "' in select operator," + " expected 'function'");
+        }
+        if (delete target[name]) {
+            Object.defineProperty(target, name, {
+                get: function () {
+                    var /** @type {?} */ source$ = NgrxSelect.store;
+                    if (!source$) {
+                        throw new Error('NgrxSelect not connected to store!');
+                    }
+                    return source$.pipe.apply(source$, [select(mapFn)].concat(operations));
+                },
+                enumerable: true,
+                configurable: true
+            });
+        }
+    };
+}
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Provide an utility for select a piece of state from Root State.
+ * Support shorthand syntax with 'dot' split property name and leave it empty
+ * will use the component property name.
+ * \@example
+ * export class MyComponent {
+ *   \@Select() prop1: Observable<any>
+ *   \@Select('feature.prop2') prop2: Observable<any>
+ *   \@Select('feature', 'prop3') prop3: Observable<any>
+ * }
+ * @template A, B
+ * @param {?=} path
+ * @param {...?} paths
+ * @return {?}
+ */
+function Pluck(path) {
+    var paths = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        paths[_i - 1] = arguments[_i];
+    }
+    return function (target, name) {
+        var /** @type {?} */ fn;
+        if (!path) {
+            path = name;
+        }
+        if (typeof path !== 'string') {
+            throw new TypeError("Unexpected type '" + typeof path + "' in select operator," + " expected 'string'");
+        }
+        fn = getPropFactory(paths.length ? [path].concat(paths) : path.split('.'));
+        if (delete target[name]) {
+            Object.defineProperty(target, name, {
+                get: function () {
+                    var /** @type {?} */ source$ = NgrxSelect.store;
+                    if (!source$) {
+                        throw new Error('NgrxSelect not connected to store!');
+                    }
+                    return source$.pipe(select(fn));
+                },
+                enumerable: true,
+                configurable: true
+            });
+        }
+    };
+}
+/**
+ * @param {?} paths
+ * @return {?}
+ */
+function getPropFactory(paths) {
+    return function (state) { return paths.reduce(function (prev, cur) {
+        return prev && prev[cur];
+    }, state); };
+}
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
@@ -98,5 +151,5 @@ NgrxUtilsModule.ctorParameters = function () { return []; };
 /**
  * Generated bundle index. Do not edit.
  */
-export { NgrxUtilsModule, Select, NgrxSelect };
+export { NgrxUtilsModule, NgrxSelect, Select, Pluck };
 //# sourceMappingURL=store.es5.js.map
