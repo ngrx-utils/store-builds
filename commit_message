@@ -1,1 +1,1 @@
-5ac20c8 chore: bump deps
+cd62dc1 build: fix package.json script not rebuild in ci
