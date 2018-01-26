@@ -56,18 +56,21 @@ function Select(mapFn, ...operations) {
         if (typeof mapFn !== 'function') {
             throw new TypeError(`Unexpected type '${typeof mapFn}' in select operator,` + ` expected 'function'`);
         }
+        /**
+         * Get property descriptor for more precise define object property
+         */
+        const /** @type {?} */ descriptor = Object.getOwnPropertyDescriptor(target, name);
         if (delete target[name]) {
-            Object.defineProperty(target, name, {
-                get: () => {
+            Object.defineProperty(target, name, Object.assign({ /**
+                 * @return {?}
+                 */
+                get() {
                     const /** @type {?} */ source$ = NgrxSelect.store;
                     if (!source$) {
                         throw new Error('NgrxSelect not connected to store!');
                     }
                     return source$.pipe(select(mapFn), ...operations);
-                },
-                enumerable: true,
-                configurable: true
-            });
+                } }, descriptor));
         }
     };
 }
@@ -82,9 +85,9 @@ function Select(mapFn, ...operations) {
  * will use the component property name.
  * \@example
  * export class MyComponent {
- *   \@Select() prop1: Observable<any>
- *   \@Select('feature.prop2') prop2: Observable<any>
- *   \@Select('feature', 'prop3') prop3: Observable<any>
+ *   \@Pluck() prop1: Observable<any>
+ *   \@Pluck('feature.prop2') prop2: Observable<any>
+ *   \@Pluck('feature', 'prop3') prop3: Observable<any>
  * }
  * @template A, B
  * @param {?=} path
@@ -101,18 +104,21 @@ function Pluck(path, ...paths) {
             throw new TypeError(`Unexpected type '${typeof path}' in select operator,` + ` expected 'string'`);
         }
         fn = getPropFactory(paths.length ? [path, ...paths] : path.split('.'));
+        /**
+         * Get property descriptor for more precise define object property
+         */
+        const /** @type {?} */ descriptor = Object.getOwnPropertyDescriptor(target, name);
         if (delete target[name]) {
-            Object.defineProperty(target, name, {
-                get: () => {
+            Object.defineProperty(target, name, Object.assign({ /**
+                 * @return {?}
+                 */
+                get() {
                     const /** @type {?} */ source$ = NgrxSelect.store;
                     if (!source$) {
                         throw new Error('NgrxSelect not connected to store!');
                     }
                     return source$.pipe(select(fn));
-                },
-                enumerable: true,
-                configurable: true
-            });
+                } }, descriptor));
         }
     };
 }

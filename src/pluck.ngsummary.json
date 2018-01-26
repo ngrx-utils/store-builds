@@ -1,0 +1,1 @@
+{"moduleName":null,"summaries":[{"symbol":{"__symbol":0,"members":[]},"metadata":{"__symbolic":"function","parameters":["path","paths"],"value":{"__symbolic":"error","message":"Lambda not supported","line":15,"character":9,"fileName":"modules/store/src/pluck.ts"}}}],"symbols":[{"__symbol":0,"name":"Pluck","filePath":"./pluck"}]}

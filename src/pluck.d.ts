@@ -4,9 +4,9 @@
  * will use the component property name.
  * @example
  * export class MyComponent {
- *   @Select() prop1: Observable<any>
- *   @Select('feature.prop2') prop2: Observable<any>
- *   @Select('feature', 'prop3') prop3: Observable<any>
+ *   @Pluck() prop1: Observable<any>
+ *   @Pluck('feature.prop2') prop2: Observable<any>
+ *   @Pluck('feature', 'prop3') prop3: Observable<any>
  * }
  */
 export declare function Pluck<A = any, B = any>(path?: string, ...paths: string[]): (target: any, name: string) => void;
