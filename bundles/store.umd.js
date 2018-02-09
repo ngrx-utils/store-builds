@@ -1,8 +1,8 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@ngrx/store'), require('rxjs/operators'), require('rxjs/Observable')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@ngrx/store', 'rxjs/operators', 'rxjs/Observable'], factory) :
-	(factory((global.ngrxUtils = global.ngrxUtils || {}, global.ngrxUtils.store = {}),global.ng.core,global.ngrx.store,global.operators,global.Observable));
-}(this, (function (exports,core,store,operators,Observable) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/operators'), require('rxjs/Observable')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', 'rxjs/operators', 'rxjs/Observable'], factory) :
+	(factory((global.ngrxUtils = global.ngrxUtils || {}, global.ngrxUtils.store = {}),global.ng.core,global.operators,global.Observable));
+}(this, (function (exports,core,operators,Observable) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -133,8 +133,8 @@ var NgrxSelect = /** @class */ (function () {
      * @param {?} store
      * @return {?}
      */
-    NgrxSelect.prototype.connect = function (store$$1) {
-        NgrxSelect.store = store$$1;
+    NgrxSelect.prototype.connect = function (store) {
+        NgrxSelect.store = store;
     };
     return NgrxSelect;
 }());
@@ -197,7 +197,8 @@ function Select(mapFn) {
                     if (!source$) {
                         throw new Error('NgrxSelect not connected to store!');
                     }
-                    return source$.pipe.apply(source$, [store.select(mapFn)].concat(operations));
+                    return (_a = source$.select(mapFn)).pipe.apply(_a, operations);
+                    var _a;
                 }
             }, descriptor));
         }

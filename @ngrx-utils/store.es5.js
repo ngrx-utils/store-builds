@@ -1,5 +1,4 @@
 import { Injectable, NgModule } from '@angular/core';
-import { select } from '@ngrx/store';
 import { pluck, takeUntil } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 /**
@@ -195,7 +194,8 @@ function Select(mapFn) {
                     if (!source$) {
                         throw new Error('NgrxSelect not connected to store!');
                     }
-                    return source$.pipe.apply(source$, [select(mapFn)].concat(operations));
+                    return (_a = source$.select(mapFn)).pipe.apply(_a, operations);
+                    var _a;
                 }
             }, descriptor));
         }
