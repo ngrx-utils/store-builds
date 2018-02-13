@@ -1,8 +1,8 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/operators'), require('rxjs/Observable')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', 'rxjs/operators', 'rxjs/Observable'], factory) :
-	(factory((global.ngrxUtils = global.ngrxUtils || {}, global.ngrxUtils.store = {}),global.ng.core,global.operators,global.Observable));
-}(this, (function (exports,core,operators,Observable) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@ngrx/store'), require('rxjs/operators'), require('rxjs/Observable')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@ngrx/store', 'rxjs/operators', 'rxjs/Observable'], factory) :
+	(factory((global.ngrxUtils = global.ngrxUtils || {}, global.ngrxUtils.store = {}),global.ng.core,global.ngrx.store,global.operators,global.Observable));
+}(this, (function (exports,core,store,operators,Observable) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -130,11 +130,12 @@ var NgrxSelect = /** @class */ (function () {
     function NgrxSelect() {
     }
     /**
+     * \@internal
      * @param {?} store
      * @return {?}
      */
-    NgrxSelect.prototype.connect = function (store) {
-        NgrxSelect.store = store;
+    NgrxSelect.prototype.connect = function (store$$1) {
+        NgrxSelect.store = store$$1;
     };
     return NgrxSelect;
 }());
@@ -148,17 +149,26 @@ NgrxSelect.decorators = [
 /** @nocollapse */
 NgrxSelect.ctorParameters = function () { return []; };
 var NgrxUtilsModule = /** @class */ (function () {
-    function NgrxUtilsModule() {
+    /**
+     * \@internal
+     * @param {?} ngrxSelect
+     * @param {?} store
+     */
+    function NgrxUtilsModule(ngrxSelect, store$$1) {
+        ngrxSelect.connect(store$$1);
     }
     return NgrxUtilsModule;
 }());
 NgrxUtilsModule.decorators = [
     { type: core.NgModule, args: [{
-                providers: [NgrxSelect, WebWorkerService]
+                providers: [WebWorkerService, NgrxSelect]
             },] },
 ];
 /** @nocollapse */
-NgrxUtilsModule.ctorParameters = function () { return []; };
+NgrxUtilsModule.ctorParameters = function () { return [
+    { type: NgrxSelect, },
+    { type: store.Store, },
+]; };
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc

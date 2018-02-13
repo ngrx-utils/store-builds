@@ -1,4 +1,5 @@
 import { Injectable, NgModule } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { pluck, takeUntil } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 /**
@@ -127,6 +128,7 @@ var NgrxSelect = /** @class */ (function () {
     function NgrxSelect() {
     }
     /**
+     * \@internal
      * @param {?} store
      * @return {?}
      */
@@ -145,17 +147,26 @@ NgrxSelect.decorators = [
 /** @nocollapse */
 NgrxSelect.ctorParameters = function () { return []; };
 var NgrxUtilsModule = /** @class */ (function () {
-    function NgrxUtilsModule() {
+    /**
+     * \@internal
+     * @param {?} ngrxSelect
+     * @param {?} store
+     */
+    function NgrxUtilsModule(ngrxSelect, store) {
+        ngrxSelect.connect(store);
     }
     return NgrxUtilsModule;
 }());
 NgrxUtilsModule.decorators = [
     { type: NgModule, args: [{
-                providers: [NgrxSelect, WebWorkerService]
+                providers: [WebWorkerService, NgrxSelect]
             },] },
 ];
 /** @nocollapse */
-NgrxUtilsModule.ctorParameters = function () { return []; };
+NgrxUtilsModule.ctorParameters = function () { return [
+    { type: NgrxSelect, },
+    { type: Store, },
+]; };
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
