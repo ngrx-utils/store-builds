@@ -1,1 +1,0 @@
-{"moduleName":null,"summaries":[{"symbol":{"__symbol":0,"members":[]},"metadata":{"__symbolic":"function","parameters":["mapFn","operations"],"value":{"__symbolic":"error","message":"Lambda not supported","line":81,"character":9,"fileName":"modules/store/src/select.ts"}}}],"symbols":[{"__symbol":0,"name":"Select","filePath":"./select"}]}
