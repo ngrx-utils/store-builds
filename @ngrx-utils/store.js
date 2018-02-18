@@ -1,4 +1,4 @@
-import { Injectable, NgModule } from '@angular/core';
+import { Injectable, NgModule, Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { pluck, takeUntil } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
@@ -272,12 +272,12 @@ function Pluck(path, ...paths) {
 // create a symbol identify the observable I add to
 // the component so it doesn't conflict with anything.
 // I need this so I'm able to add the desired behaviour to the component.
-const destroy$ = Symbol('destroy$');
+const /** @type {?} */ destroy$ = Symbol('destroy$');
 /**
  * an operator that takes until destroy it takes a components this a parameter
  * returns a lettable RxJS operator.
  */
-const untilDestroy = (component) => {
+const /** @type {?} */ untilDestroy = (component) => {
     if (component[destroy$] === undefined) {
         // only hookup each component once.
         addDestroyObservableToComponent(component);
@@ -318,6 +318,52 @@ function addDestroyObservableToComponent(component) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+class NgLetContext {
+    constructor() {
+        this.$implicit = null;
+        this.ngLet = null;
+    }
+}
+class NgLetDirective {
+    /**
+     * @param {?} _vcr
+     * @param {?} _templateRef
+     */
+    constructor(_vcr, _templateRef) {
+        this._context = new NgLetContext();
+        _vcr.createEmbeddedView(_templateRef, this._context);
+    }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set ngLet(value) {
+        this._context.$implicit = this._context.ngLet = value;
+    }
+}
+NgLetDirective.decorators = [
+    { type: Directive, args: [{
+                selector: '[ngLet]'
+            },] },
+];
+/** @nocollapse */
+NgLetDirective.ctorParameters = () => [
+    { type: ViewContainerRef, },
+    { type: TemplateRef, },
+];
+NgLetDirective.propDecorators = {
+    "ngLet": [{ type: Input },],
+};
+class NgUtilsModule {
+}
+NgUtilsModule.decorators = [
+    { type: NgModule, args: [{
+                declarations: [NgLetDirective],
+                exports: [NgLetDirective]
+            },] },
+];
+/** @nocollapse */
+NgUtilsModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle
@@ -328,9 +374,11 @@ function addDestroyObservableToComponent(component) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
- * Generated bundle index. Do not edit.
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 
-export { NgrxUtilsModule, NgrxSelect, Select, Pluck, pluck$1 as pluck, WebWorkerService, untilDestroy };
+export { NgrxUtilsModule, Select, Pluck, pluck$1 as pluck, WebWorkerService, untilDestroy, NgLetDirective, NgUtilsModule, NgrxSelect as ɵa, NgLetContext as ɵb };
 //# sourceMappingURL=store.js.map

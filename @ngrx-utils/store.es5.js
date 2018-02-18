@@ -1,4 +1,4 @@
-import { Injectable, NgModule } from '@angular/core';
+import { Injectable, NgModule, Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { pluck, takeUntil } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
@@ -280,12 +280,12 @@ function Pluck(path) {
 // create a symbol identify the observable I add to
 // the component so it doesn't conflict with anything.
 // I need this so I'm able to add the desired behaviour to the component.
-var destroy$ = Symbol('destroy$');
+var /** @type {?} */ destroy$ = Symbol('destroy$');
 /**
  * an operator that takes until destroy it takes a components this a parameter
  * returns a lettable RxJS operator.
  */
-var untilDestroy = function (component) {
+var /** @type {?} */ untilDestroy = function (component) {
     if (component[destroy$] === undefined) {
         // only hookup each component once.
         addDestroyObservableToComponent(component);
@@ -325,6 +325,61 @@ function addDestroyObservableToComponent(component) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+var NgLetContext = /** @class */ (function () {
+    function NgLetContext() {
+        this.$implicit = null;
+        this.ngLet = null;
+    }
+    return NgLetContext;
+}());
+var NgLetDirective = /** @class */ (function () {
+    /**
+     * @param {?} _vcr
+     * @param {?} _templateRef
+     */
+    function NgLetDirective(_vcr, _templateRef) {
+        this._context = new NgLetContext();
+        _vcr.createEmbeddedView(_templateRef, this._context);
+    }
+    Object.defineProperty(NgLetDirective.prototype, "ngLet", {
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        set: function (value) {
+            this._context.$implicit = this._context.ngLet = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return NgLetDirective;
+}());
+NgLetDirective.decorators = [
+    { type: Directive, args: [{
+                selector: '[ngLet]'
+            },] },
+];
+/** @nocollapse */
+NgLetDirective.ctorParameters = function () { return [
+    { type: ViewContainerRef, },
+    { type: TemplateRef, },
+]; };
+NgLetDirective.propDecorators = {
+    "ngLet": [{ type: Input },],
+};
+var NgUtilsModule = /** @class */ (function () {
+    function NgUtilsModule() {
+    }
+    return NgUtilsModule;
+}());
+NgUtilsModule.decorators = [
+    { type: NgModule, args: [{
+                declarations: [NgLetDirective],
+                exports: [NgLetDirective]
+            },] },
+];
+/** @nocollapse */
+NgUtilsModule.ctorParameters = function () { return []; };
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -334,7 +389,8 @@ function addDestroyObservableToComponent(component) {
  * @suppress {checkTypes} checked by tsc
  */
 /**
- * Generated bundle index. Do not edit.
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
-export { NgrxUtilsModule, NgrxSelect, Select, Pluck, pluck$1 as pluck, WebWorkerService, untilDestroy };
+export { NgrxUtilsModule, Select, Pluck, pluck$1 as pluck, WebWorkerService, untilDestroy, NgLetDirective, NgUtilsModule, NgrxSelect as ɵa, NgLetContext as ɵb };
 //# sourceMappingURL=store.es5.js.map
