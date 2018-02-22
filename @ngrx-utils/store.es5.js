@@ -367,19 +367,19 @@ NgLetDirective.ctorParameters = function () { return [
 NgLetDirective.propDecorators = {
     "ngLet": [{ type: Input },],
 };
-var NgUtilsModule = /** @class */ (function () {
-    function NgUtilsModule() {
+var NgLetModule = /** @class */ (function () {
+    function NgLetModule() {
     }
-    return NgUtilsModule;
+    return NgLetModule;
 }());
-NgUtilsModule.decorators = [
+NgLetModule.decorators = [
     { type: NgModule, args: [{
                 declarations: [NgLetDirective],
                 exports: [NgLetDirective]
             },] },
 ];
 /** @nocollapse */
-NgUtilsModule.ctorParameters = function () { return []; };
+NgLetModule.ctorParameters = function () { return []; };
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -392,5 +392,5 @@ NgUtilsModule.ctorParameters = function () { return []; };
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-export { NgrxUtilsModule, Select, Pluck, pluck$1 as pluck, WebWorkerService, untilDestroy, NgLetDirective, NgUtilsModule, NgrxSelect as ɵa, NgLetContext as ɵb };
+export { NgrxUtilsModule, Select, Pluck, pluck$1 as pluck, WebWorkerService, untilDestroy, NgLetDirective, NgLetModule, NgrxSelect as ɵa, NgLetContext as ɵb };
 //# sourceMappingURL=store.es5.js.map

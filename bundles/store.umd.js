@@ -369,19 +369,19 @@ NgLetDirective.ctorParameters = function () { return [
 NgLetDirective.propDecorators = {
     "ngLet": [{ type: core.Input },],
 };
-var NgUtilsModule = /** @class */ (function () {
-    function NgUtilsModule() {
+var NgLetModule = /** @class */ (function () {
+    function NgLetModule() {
     }
-    return NgUtilsModule;
+    return NgLetModule;
 }());
-NgUtilsModule.decorators = [
+NgLetModule.decorators = [
     { type: core.NgModule, args: [{
                 declarations: [NgLetDirective],
                 exports: [NgLetDirective]
             },] },
 ];
 /** @nocollapse */
-NgUtilsModule.ctorParameters = function () { return []; };
+NgLetModule.ctorParameters = function () { return []; };
 
 exports.NgrxUtilsModule = NgrxUtilsModule;
 exports.Select = Select;
@@ -390,7 +390,7 @@ exports.pluck = pluck$1;
 exports.WebWorkerService = WebWorkerService;
 exports.untilDestroy = untilDestroy;
 exports.NgLetDirective = NgLetDirective;
-exports.NgUtilsModule = NgUtilsModule;
+exports.NgLetModule = NgLetModule;
 exports.ɵa = NgrxSelect;
 exports.ɵb = NgLetContext;
 

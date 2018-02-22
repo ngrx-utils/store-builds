@@ -8,5 +8,5 @@ export declare class NgLetDirective {
     ngLet: any;
     constructor(_vcr: ViewContainerRef, _templateRef: TemplateRef<NgLetContext>);
 }
-export declare class NgUtilsModule {
+export declare class NgLetModule {
 }

@@ -1,1 +1,1 @@
-6366ba7 test(store): add more test for modules, web-worker, ngLet
+8187340 test: temporary remove snapshot test to fix jest bug
