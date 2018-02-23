@@ -1,7 +1,146 @@
-import { Injectable, NgModule, Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { NgModule, Injectable, Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { pluck, takeUntil } from 'rxjs/operators';
+import { pluck } from 'rxjs/operators/pluck';
 import { Observable } from 'rxjs/Observable';
+import { takeUntil } from 'rxjs/operators/takeUntil';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+class NgrxSelect {
+    /**
+     * \@internal
+     * @param {?} store
+     * @return {?}
+     */
+    connect(store) {
+        NgrxSelect.store = store;
+    }
+}
+/**
+ * \@internal
+ */
+NgrxSelect.store = undefined;
+NgrxSelect.decorators = [
+    { type: Injectable },
+];
+/** @nocollapse */
+NgrxSelect.ctorParameters = () => [];
+class NgrxUtilsModule {
+    /**
+     * \@internal
+     * @param {?} ngrxSelect
+     * @param {?} store
+     */
+    constructor(ngrxSelect, store) {
+        ngrxSelect.connect(store);
+    }
+}
+NgrxUtilsModule.decorators = [
+    { type: NgModule, args: [{
+                providers: [NgrxSelect]
+            },] },
+];
+/** @nocollapse */
+NgrxUtilsModule.ctorParameters = () => [
+    { type: NgrxSelect, },
+    { type: Store, },
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Provide an utility for select a piece of state from Root State.
+ * Support shorthand syntax with 'dot' split property name and leave it empty
+ * will use the component property name.
+ * \@example
+ * export class MyComponent {
+ *   \@Pluck() prop1: Observable<any>
+ *   \@Pluck('feature.prop2') prop2: Observable<any>
+ *   \@Pluck('feature', 'prop3') prop3: Observable<any>
+ * }
+ * @param {?=} path
+ * @param {...?} paths
+ * @return {?}
+ */
+function Pluck(path, ...paths) {
+    return function (target, name) {
+        let /** @type {?} */ props;
+        if (!path) {
+            path = name;
+        }
+        if (typeof path !== 'string') {
+            throw new TypeError(`Unexpected type '${typeof path}' in select operator,` + ` expected 'string'`);
+        }
+        props = paths.length ? [path, ...paths] : path.split('.');
+        /**
+         * Get property descriptor for more precise define object property
+         */
+        const /** @type {?} */ descriptor = Object.getOwnPropertyDescriptor(target, name);
+        if (delete target[name]) {
+            Object.defineProperty(target, name, Object.assign({ /**
+                 * @return {?}
+                 */
+                get() {
+                    const /** @type {?} */ source$ = NgrxSelect.store;
+                    if (!source$) {
+                        throw new Error('NgrxSelect not connected to store!');
+                    }
+                    return source$.pipe(pluck(...props));
+                } }, descriptor));
+        }
+    };
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Select decorator act like pipe operator of Observable
+ * except the first parameter is a selector to select a piece
+ * of state from \@ngrx/store and you won't be able to subscribe to it
+ * \@example
+ * export class MyComponent {
+ *   \@Select(fromStore.getAuth, take(1))
+ *   isAuth: Observable<boolean>
+ * }
+ * @template A, B
+ * @param {?} mapFn
+ * @param {...?} operations
+ * @return {?}
+ */
+function Select(mapFn, ...operations) {
+    return function (target, name) {
+        if (typeof mapFn !== 'function') {
+            throw new TypeError(`Unexpected type '${typeof mapFn}' in select operator,` + ` expected 'function'`);
+        }
+        /**
+         * Get property descriptor for more precise define object property
+         */
+        const /** @type {?} */ descriptor = Object.getOwnPropertyDescriptor(target, name);
+        if (delete target[name]) {
+            Object.defineProperty(target, name, Object.assign({ /**
+                 * @return {?}
+                 */
+                get() {
+                    const /** @type {?} */ source$ = NgrxSelect.store;
+                    if (!source$) {
+                        throw new Error('NgrxSelect not connected to store!');
+                    }
+                    return source$.select(mapFn).pipe(...operations);
+                } }, descriptor));
+        }
+    };
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -123,92 +262,20 @@ WebWorkerService.decorators = [
 ];
 /** @nocollapse */
 WebWorkerService.ctorParameters = () => [];
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-class NgrxSelect {
-    /**
-     * \@internal
-     * @param {?} store
-     * @return {?}
-     */
-    connect(store) {
-        NgrxSelect.store = store;
-    }
+class WebWorkerModule {
 }
-/**
- * \@internal
- */
-NgrxSelect.store = undefined;
-NgrxSelect.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-NgrxSelect.ctorParameters = () => [];
-class NgrxUtilsModule {
-    /**
-     * \@internal
-     * @param {?} ngrxSelect
-     * @param {?} store
-     */
-    constructor(ngrxSelect, store) {
-        ngrxSelect.connect(store);
-    }
-}
-NgrxUtilsModule.decorators = [
+WebWorkerModule.decorators = [
     { type: NgModule, args: [{
-                providers: [WebWorkerService, NgrxSelect]
+                providers: [WebWorkerService]
             },] },
 ];
 /** @nocollapse */
-NgrxUtilsModule.ctorParameters = () => [
-    { type: NgrxSelect, },
-    { type: Store, },
-];
+WebWorkerModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
- * Select decorator act like pipe operator of Observable
- * except the first parameter is a selector to select a piece
- * of state from \@ngrx/store and you won't be able to subscribe to it
- * \@example
- * export class MyComponent {
- *   \@Select(fromStore.getAuth, take(1))
- *   isAuth: Observable<boolean>
- * }
- * @template A, B
- * @param {?} mapFn
- * @param {...?} operations
- * @return {?}
- */
-function Select(mapFn, ...operations) {
-    return function (target, name) {
-        if (typeof mapFn !== 'function') {
-            throw new TypeError(`Unexpected type '${typeof mapFn}' in select operator,` + ` expected 'function'`);
-        }
-        /**
-         * Get property descriptor for more precise define object property
-         */
-        const /** @type {?} */ descriptor = Object.getOwnPropertyDescriptor(target, name);
-        if (delete target[name]) {
-            Object.defineProperty(target, name, Object.assign({ /**
-                 * @return {?}
-                 */
-                get() {
-                    const /** @type {?} */ source$ = NgrxSelect.store;
-                    if (!source$) {
-                        throw new Error('NgrxSelect not connected to store!');
-                    }
-                    return source$.select(mapFn).pipe(...operations);
-                } }, descriptor));
-        }
-    };
-}
 
 /**
  * @fileoverview added by tsickle
@@ -222,48 +289,6 @@ function Select(mapFn, ...operations) {
 function pluck$1(...props) {
     return pluck(...props);
 }
-/**
- * Provide an utility for select a piece of state from Root State.
- * Support shorthand syntax with 'dot' split property name and leave it empty
- * will use the component property name.
- * \@example
- * export class MyComponent {
- *   \@Pluck() prop1: Observable<any>
- *   \@Pluck('feature.prop2') prop2: Observable<any>
- *   \@Pluck('feature', 'prop3') prop3: Observable<any>
- * }
- * @param {?=} path
- * @param {...?} paths
- * @return {?}
- */
-function Pluck(path, ...paths) {
-    return function (target, name) {
-        let /** @type {?} */ props;
-        if (!path) {
-            path = name;
-        }
-        if (typeof path !== 'string') {
-            throw new TypeError(`Unexpected type '${typeof path}' in select operator,` + ` expected 'string'`);
-        }
-        props = paths.length ? [path, ...paths] : path.split('.');
-        /**
-         * Get property descriptor for more precise define object property
-         */
-        const /** @type {?} */ descriptor = Object.getOwnPropertyDescriptor(target, name);
-        if (delete target[name]) {
-            Object.defineProperty(target, name, Object.assign({ /**
-                 * @return {?}
-                 */
-                get() {
-                    const /** @type {?} */ source$ = NgrxSelect.store;
-                    if (!source$) {
-                        throw new Error('NgrxSelect not connected to store!');
-                    }
-                    return source$.pipe(pluck(...props));
-                } }, descriptor));
-        }
-    };
-}
 
 /**
  * @fileoverview added by tsickle
@@ -274,15 +299,15 @@ function Pluck(path, ...paths) {
 // I need this so I'm able to add the desired behaviour to the component.
 const /** @type {?} */ destroy$ = Symbol('destroy$');
 /**
- * an operator that takes until destroy it takes a components this a parameter
- * returns a lettable RxJS operator.
+ * An operator that takes until destroy it takes a components this a parameter
+ * returns a pipeable RxJS operator.
  */
 const /** @type {?} */ untilDestroy = (component) => {
     if (component[destroy$] === undefined) {
         // only hookup each component once.
         addDestroyObservableToComponent(component);
     }
-    // pipe in the takeuntil destroy$ and return the source unaltered
+    // pipe in the takeUntil destroy$ and return the source unaltered
     return takeUntil(component[destroy$]);
 };
 /**
@@ -313,6 +338,11 @@ function addDestroyObservableToComponent(component) {
         return (_) => (component[destroy$] = undefined);
     });
 }
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -380,5 +410,10 @@ NgLetModule.ctorParameters = () => [];
  * @suppress {checkTypes} checked by tsc
  */
 
-export { NgrxUtilsModule, Select, Pluck, pluck$1 as pluck, WebWorkerService, untilDestroy, NgLetDirective, NgLetModule, NgrxSelect as ɵa, NgLetContext as ɵb };
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+export { Select, Pluck, NgrxUtilsModule, WebWorkerService, WebWorkerModule, untilDestroy, pluck$1 as pluck, NgLetDirective, NgLetModule, NgrxSelect as ɵa, NgLetContext as ɵb };
 //# sourceMappingURL=store.js.map

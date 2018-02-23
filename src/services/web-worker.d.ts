@@ -11,3 +11,5 @@ export declare class WebWorkerService {
     private createPromiseCleaner<T>(promise);
     private removePromise<T>(promise);
 }
+export declare class WebWorkerModule {
+}
