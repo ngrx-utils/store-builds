@@ -27,9 +27,8 @@ NgrxSelect.decorators = [
 ];
 /** @nocollapse */
 NgrxSelect.ctorParameters = () => [];
-class NgrxUtilsModule {
+class NgrxSelectModule {
     /**
-     * \@internal
      * @param {?} ngrxSelect
      * @param {?} store
      */
@@ -37,13 +36,13 @@ class NgrxUtilsModule {
         ngrxSelect.connect(store);
     }
 }
-NgrxUtilsModule.decorators = [
+NgrxSelectModule.decorators = [
     { type: NgModule, args: [{
                 providers: [NgrxSelect]
             },] },
 ];
 /** @nocollapse */
-NgrxUtilsModule.ctorParameters = () => [
+NgrxSelectModule.ctorParameters = () => [
     { type: NgrxSelect, },
     { type: Store, },
 ];
@@ -415,5 +414,5 @@ NgLetModule.ctorParameters = () => [];
  * @suppress {checkTypes} checked by tsc
  */
 
-export { Select, Pluck, NgrxUtilsModule, WebWorkerService, WebWorkerModule, untilDestroy, pluck$1 as pluck, NgLetDirective, NgLetModule, NgrxSelect as ɵa, NgLetContext as ɵb };
+export { Select, Pluck, NgrxSelectModule, WebWorkerService, WebWorkerModule, untilDestroy, pluck$1 as pluck, NgLetDirective, NgLetModule, NgrxSelect as ɵa, NgLetContext as ɵb };
 //# sourceMappingURL=store.js.map

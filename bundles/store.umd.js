@@ -30,24 +30,23 @@ NgrxSelect.decorators = [
 ];
 /** @nocollapse */
 NgrxSelect.ctorParameters = function () { return []; };
-var NgrxUtilsModule = /** @class */ (function () {
+var NgrxSelectModule = /** @class */ (function () {
     /**
-     * \@internal
      * @param {?} ngrxSelect
      * @param {?} store
      */
-    function NgrxUtilsModule(ngrxSelect, store$$1) {
+    function NgrxSelectModule(ngrxSelect, store$$1) {
         ngrxSelect.connect(store$$1);
     }
-    return NgrxUtilsModule;
+    return NgrxSelectModule;
 }());
-NgrxUtilsModule.decorators = [
+NgrxSelectModule.decorators = [
     { type: core.NgModule, args: [{
                 providers: [NgrxSelect]
             },] },
 ];
 /** @nocollapse */
-NgrxUtilsModule.ctorParameters = function () { return [
+NgrxSelectModule.ctorParameters = function () { return [
     { type: NgrxSelect, },
     { type: store.Store, },
 ]; };
@@ -413,7 +412,7 @@ NgLetModule.ctorParameters = function () { return []; };
 
 exports.Select = Select;
 exports.Pluck = Pluck;
-exports.NgrxUtilsModule = NgrxUtilsModule;
+exports.NgrxSelectModule = NgrxSelectModule;
 exports.WebWorkerService = WebWorkerService;
 exports.WebWorkerModule = WebWorkerModule;
 exports.untilDestroy = untilDestroy;

@@ -29,24 +29,23 @@ NgrxSelect.decorators = [
 ];
 /** @nocollapse */
 NgrxSelect.ctorParameters = function () { return []; };
-var NgrxUtilsModule = /** @class */ (function () {
+var NgrxSelectModule = /** @class */ (function () {
     /**
-     * \@internal
      * @param {?} ngrxSelect
      * @param {?} store
      */
-    function NgrxUtilsModule(ngrxSelect, store) {
+    function NgrxSelectModule(ngrxSelect, store) {
         ngrxSelect.connect(store);
     }
-    return NgrxUtilsModule;
+    return NgrxSelectModule;
 }());
-NgrxUtilsModule.decorators = [
+NgrxSelectModule.decorators = [
     { type: NgModule, args: [{
                 providers: [NgrxSelect]
             },] },
 ];
 /** @nocollapse */
-NgrxUtilsModule.ctorParameters = function () { return [
+NgrxSelectModule.ctorParameters = function () { return [
     { type: NgrxSelect, },
     { type: Store, },
 ]; };
@@ -425,5 +424,5 @@ NgLetModule.ctorParameters = function () { return []; };
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-export { Select, Pluck, NgrxUtilsModule, WebWorkerService, WebWorkerModule, untilDestroy, pluck$1 as pluck, NgLetDirective, NgLetModule, NgrxSelect as ɵa, NgLetContext as ɵb };
+export { Select, Pluck, NgrxSelectModule, WebWorkerService, WebWorkerModule, untilDestroy, pluck$1 as pluck, NgLetDirective, NgLetModule, NgrxSelect as ɵa, NgLetContext as ɵb };
 //# sourceMappingURL=store.es5.js.map
