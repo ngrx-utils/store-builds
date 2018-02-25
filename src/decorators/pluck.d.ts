@@ -9,4 +9,4 @@
  *   @Pluck('feature', 'prop3') prop3: Observable<any>
  * }
  */
-export declare function Pluck(path?: string, ...paths: string[]): (target: any, name: string) => void;
+export declare function Pluck(path?: string, ...paths: string[]): (target: any, propertyKey: string) => void;

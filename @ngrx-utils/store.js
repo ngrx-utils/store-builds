@@ -1,4 +1,4 @@
-import { NgModule, Injectable, Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { NgModule, Injectable, SkipSelf, Optional, Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { pluck } from 'rxjs/operators/pluck';
 import { Observable } from 'rxjs/Observable';
@@ -31,8 +31,12 @@ class NgrxSelectModule {
     /**
      * @param {?} ngrxSelect
      * @param {?} store
+     * @param {?} module
      */
-    constructor(ngrxSelect, store) {
+    constructor(ngrxSelect, store, module) {
+        if (module) {
+            throw new Error('Only import NgrxSelectModule to top level module like AppModule');
+        }
         ngrxSelect.connect(store);
     }
 }
@@ -45,6 +49,26 @@ NgrxSelectModule.decorators = [
 NgrxSelectModule.ctorParameters = () => [
     { type: NgrxSelect, },
     { type: Store, },
+    { type: NgrxSelectModule, decorators: [{ type: SkipSelf }, { type: Optional },] },
+];
+class NgrxUtilsModule {
+    /**
+     * @param {?} module
+     */
+    constructor(module) {
+        if (module) {
+            throw new Error('Only import NgrxUtilsModule to top level module like AppModule');
+        }
+    }
+}
+NgrxUtilsModule.decorators = [
+    { type: NgModule, args: [{
+                exports: [NgrxSelectModule]
+            },] },
+];
+/** @nocollapse */
+NgrxUtilsModule.ctorParameters = () => [
+    { type: NgrxUtilsModule, decorators: [{ type: SkipSelf }, { type: Optional },] },
 ];
 
 /**
@@ -66,21 +90,21 @@ NgrxSelectModule.ctorParameters = () => [
  * @return {?}
  */
 function Pluck(path, ...paths) {
-    return function (target, name) {
+    return function (target, propertyKey) {
         let /** @type {?} */ props;
         if (!path) {
-            path = name;
+            path = propertyKey;
         }
         if (typeof path !== 'string') {
-            throw new TypeError(`Unexpected type '${typeof path}' in select operator,` + ` expected 'string'`);
+            throw new TypeError(`Unexpected type '${typeof path}' in pluck operator, expected 'string'`);
         }
         props = paths.length ? [path, ...paths] : path.split('.');
         /**
          * Get property descriptor for more precise define object property
          */
-        const /** @type {?} */ descriptor = Object.getOwnPropertyDescriptor(target, name);
-        if (delete target[name]) {
-            Object.defineProperty(target, name, Object.assign({ /**
+        const /** @type {?} */ descriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
+        if (delete target[propertyKey]) {
+            Object.defineProperty(target, propertyKey, Object.assign({}, descriptor, { /**
                  * @return {?}
                  */
                 get() {
@@ -89,7 +113,7 @@ function Pluck(path, ...paths) {
                         throw new Error('NgrxSelect not connected to store!');
                     }
                     return source$.pipe(pluck(...props));
-                } }, descriptor));
+                } }));
         }
     };
 }
@@ -113,16 +137,16 @@ function Pluck(path, ...paths) {
  * @return {?}
  */
 function Select(mapFn, ...operations) {
-    return function (target, name) {
+    return function (target, propertyKey) {
         if (typeof mapFn !== 'function') {
-            throw new TypeError(`Unexpected type '${typeof mapFn}' in select operator,` + ` expected 'function'`);
+            throw new TypeError(`Unexpected type '${typeof mapFn}' in select operator, expected 'function'`);
         }
         /**
          * Get property descriptor for more precise define object property
          */
-        const /** @type {?} */ descriptor = Object.getOwnPropertyDescriptor(target, name);
-        if (delete target[name]) {
-            Object.defineProperty(target, name, Object.assign({ /**
+        const /** @type {?} */ descriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
+        if (delete target[propertyKey]) {
+            Object.defineProperty(target, propertyKey, Object.assign({}, descriptor, { /**
                  * @return {?}
                  */
                 get() {
@@ -131,8 +155,40 @@ function Select(mapFn, ...operations) {
                         throw new Error('NgrxSelect not connected to store!');
                     }
                     return source$.select(mapFn).pipe(...operations);
-                } }, descriptor));
+                } }));
         }
+    };
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @return {?}
+ */
+function Dispatch() {
+    return function (target, propertyKey, descriptor) {
+        const /** @type {?} */ originalMethod = descriptor.value;
+        if (typeof originalMethod !== 'function') {
+            throw new TypeError(`Unexpected type ${typeof originalMethod} of property ${propertyKey}, expected 'function'`);
+        }
+        // editing the descriptor/value parameter
+        descriptor.value = function (...args) {
+            const /** @type {?} */ source$ = NgrxSelect.store;
+            if (!source$) {
+                throw new Error('NgrxSelect not connected to store!');
+            }
+            // note usage of originalMethod here
+            const /** @type {?} */ action = originalMethod.apply(this, args);
+            if (typeof action !== 'object' || (typeof action === 'object' && !('type' in action))) {
+                throw new TypeError(`Unexpected action in method return type, expected object of type 'Action'`);
+            }
+            source$.dispatch(action);
+            return action;
+        };
+        // return edited descriptor as opposed to overwriting the descriptor
+        return descriptor;
     };
 }
 
@@ -414,5 +470,5 @@ NgLetModule.ctorParameters = () => [];
  * @suppress {checkTypes} checked by tsc
  */
 
-export { Select, Pluck, NgrxSelectModule, WebWorkerService, WebWorkerModule, untilDestroy, pluck$1 as pluck, NgLetDirective, NgLetModule, NgrxSelect as ɵa, NgLetContext as ɵb };
+export { Select, Pluck, NgrxSelectModule, Dispatch, NgrxUtilsModule, WebWorkerService, WebWorkerModule, untilDestroy, pluck$1 as pluck, NgLetDirective, NgLetModule, NgrxSelect as ɵa, NgLetContext as ɵb };
 //# sourceMappingURL=store.js.map
