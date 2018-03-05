@@ -193,16 +193,32 @@ function Dispatch() {
                 throw new Error('NgrxSelect not connected to store!');
             }
             // note usage of originalMethod here
-            var /** @type {?} */ action = originalMethod.apply(this, args);
-            if (typeof action !== 'object' || (typeof action === 'object' && !('type' in action))) {
-                throw new TypeError("Unexpected action in method return type, expected object of type 'Action'");
+            var /** @type {?} */ actions = originalMethod.apply(this, args);
+            if (Array.isArray(actions)) {
+                dispatch(source$, actions);
             }
-            source$.dispatch(action);
-            return action;
+            else {
+                dispatch(source$, [actions]);
+            }
+            return actions;
         };
         // return edited descriptor as opposed to overwriting the descriptor
         return descriptor;
     };
+}
+/**
+ * @template T
+ * @param {?} source$
+ * @param {?} actions
+ * @return {?}
+ */
+function dispatch(source$, actions) {
+    actions.forEach(function (action) {
+        if (typeof action !== 'object' || (typeof action === 'object' && !('type' in action))) {
+            throw new TypeError("Unexpected action in method return type, expected object of type 'Action'");
+        }
+        source$.dispatch(action);
+    });
 }
 /**
  * @fileoverview added by tsickle
