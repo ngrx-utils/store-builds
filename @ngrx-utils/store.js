@@ -150,11 +150,12 @@ function Select(mapFn, ...operations) {
                  * @return {?}
                  */
                 get() {
-                    const /** @type {?} */ source$ = NgrxSelect.store;
-                    if (!source$) {
+                    const /** @type {?} */ store = NgrxSelect.store;
+                    if (!store) {
                         throw new Error('NgrxSelect not connected to store!');
                     }
-                    return source$.select(mapFn).pipe(...operations);
+                    const /** @type {?} */ source$ = store.select(mapFn);
+                    return source$.pipe.apply(source$, operations);
                 } }));
         }
     };

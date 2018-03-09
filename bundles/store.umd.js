@@ -158,12 +158,12 @@ function Select(mapFn) {
         if (delete target[propertyKey]) {
             Object.defineProperty(target, propertyKey, Object.assign({}, descriptor, {
                 get: function () {
-                    var /** @type {?} */ source$ = NgrxSelect.store;
-                    if (!source$) {
+                    var /** @type {?} */ store$$1 = NgrxSelect.store;
+                    if (!store$$1) {
                         throw new Error('NgrxSelect not connected to store!');
                     }
-                    return (_a = source$.select(mapFn)).pipe.apply(_a, operations);
-                    var _a;
+                    var /** @type {?} */ source$ = store$$1.select(mapFn);
+                    return source$.pipe.apply(source$, operations);
                 }
             }));
         }
