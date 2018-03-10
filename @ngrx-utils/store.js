@@ -1,8 +1,13 @@
-import { NgModule, Injectable, SkipSelf, Optional, Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { NgModule, Injectable, SkipSelf, Optional, Directive, Input, TemplateRef, ViewContainerRef, Renderer2, ElementRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { pluck } from 'rxjs/operators/pluck';
 import { Observable } from 'rxjs/Observable';
 import { takeUntil } from 'rxjs/operators/takeUntil';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators/filter';
+import { combineLatest } from 'rxjs/operators/combineLatest';
+import { untilDestroy } from '@ngrx-utils/store';
+import { Subject } from 'rxjs/Subject';
 
 /**
  * @fileoverview added by tsickle
@@ -239,7 +244,7 @@ const /** @type {?} */ destroy$ = Symbol('destroy$');
  * An operator that takes until destroy it takes a components this a parameter
  * returns a pipeable RxJS operator.
  */
-const /** @type {?} */ untilDestroy = (component) => {
+const /** @type {?} */ untilDestroy$1 = (component) => {
     if (component[destroy$] === undefined) {
         // only hookup each component once.
         addDestroyObservableToComponent(component);
@@ -336,6 +341,114 @@ NgLetModule.ctorParameters = () => [];
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+class RouterLinkActiveMatch {
+    /**
+     * @param {?} router
+     * @param {?} _renderer
+     * @param {?} _ngEl
+     */
+    constructor(router, _renderer, _ngEl) {
+        this._renderer = _renderer;
+        this._ngEl = _ngEl;
+        this._curRoute = '';
+        this._matchExp = {};
+        this._onChangesHook = new Subject();
+        router.events
+            .pipe(filter(e => e instanceof NavigationEnd), combineLatest(this._onChangesHook), untilDestroy(this))
+            .subscribe(([e]) => {
+            this._curRoute = (/** @type {?} */ (e)).urlAfterRedirects;
+            this._updateClass(this._matchExp);
+        });
+    }
+    /**
+     * @param {?} v
+     * @return {?}
+     */
+    set routerLinkActiveMatch(v) {
+        if (v && typeof v === 'object') {
+            this._matchExp = v;
+        }
+        else {
+            throw new TypeError(`Unexpected type '${typeof v}' of value for ` +
+                `input of routerLinkActiveMatch directive, expected 'object'`);
+        }
+    }
+    /**
+     * @param {?} changes
+     * @return {?}
+     */
+    ngOnChanges(changes) {
+        if (changes['routerLinkActiveMatch']) {
+            this._onChangesHook.next(changes['routerLinkActiveMatch'].currentValue);
+        }
+    }
+    /**
+     * @param {?} v
+     * @return {?}
+     */
+    _updateClass(v) {
+        Object.keys(v).forEach(cls => {
+            if (v[cls] && typeof v[cls] === 'string') {
+                const /** @type {?} */ regexp = new RegExp(v[cls]);
+                if (this._curRoute.match(regexp)) {
+                    this._toggleClass(cls, true);
+                }
+                else {
+                    this._toggleClass(cls, false);
+                }
+            }
+            else {
+                throw new TypeError(`Could not convert match value to Regular Expression. ` +
+                    `Unexpected type '${typeof v[cls]}' for value of key '${cls}' ` +
+                    `in routerLinkActiveMatch directive match expression, expected 'non-empty string'`);
+            }
+        });
+    }
+    /**
+     * @param {?} classes
+     * @param {?} enabled
+     * @return {?}
+     */
+    _toggleClass(classes, enabled) {
+        classes = classes.trim();
+        classes.split(/\s+/g).forEach(cls => {
+            if (enabled) {
+                this._renderer.addClass(this._ngEl.nativeElement, cls);
+            }
+            else {
+                this._renderer.removeClass(this._ngEl.nativeElement, cls);
+            }
+        });
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() { }
+}
+RouterLinkActiveMatch.decorators = [
+    { type: Directive, args: [{
+                selector: '[routerLinkActiveMatch]'
+            },] },
+];
+/** @nocollapse */
+RouterLinkActiveMatch.ctorParameters = () => [
+    { type: Router, },
+    { type: Renderer2, },
+    { type: ElementRef, },
+];
+RouterLinkActiveMatch.propDecorators = {
+    "routerLinkActiveMatch": [{ type: Input, args: ['routerLinkActiveMatch',] },],
+};
+class RouterLinkActiveMatchModule {
+}
+RouterLinkActiveMatchModule.decorators = [
+    { type: NgModule, args: [{
+                declarations: [RouterLinkActiveMatch],
+                exports: [RouterLinkActiveMatch]
+            },] },
+];
+/** @nocollapse */
+RouterLinkActiveMatchModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle
@@ -352,5 +465,10 @@ NgLetModule.ctorParameters = () => [];
  * @suppress {checkTypes} checked by tsc
  */
 
-export { Select, Pluck, NgrxSelectModule, Dispatch, NgrxUtilsModule, untilDestroy, pluck$1 as pluck, NgLetDirective, NgLetModule, NgrxSelect as ɵa, NgLetContext as ɵb };
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+export { Select, Pluck, NgrxSelectModule, Dispatch, NgrxUtilsModule, untilDestroy$1 as untilDestroy, pluck$1 as pluck, NgLetDirective, NgLetModule, RouterLinkActiveMatchModule, RouterLinkActiveMatch, NgrxSelect as ɵa, NgLetContext as ɵb };
 //# sourceMappingURL=store.js.map
