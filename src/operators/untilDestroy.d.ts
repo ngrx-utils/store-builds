@@ -5,3 +5,7 @@ export declare const destroy$: symbol;
  * returns a pipeable RxJS operator.
  */
 export declare const untilDestroy: <T>(component: any) => (source: Observable<T>) => Observable<T>;
+/**
+ * @internal
+ */
+export declare function addDestroyObservableToComponent(component: any): void;

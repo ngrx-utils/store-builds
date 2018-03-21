@@ -6,7 +6,6 @@ import { takeUntil } from 'rxjs/operators/takeUntil';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators/filter';
 import { combineLatest } from 'rxjs/operators/combineLatest';
-import { untilDestroy } from '@ngrx-utils/store';
 import { Subject } from 'rxjs/Subject';
 
 /**
@@ -223,73 +222,6 @@ function dispatch(source$, actions) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
- * @template T, V
- * @param {...?} props
- * @return {?}
- */
-function pluck$1(...props) {
-    return pluck(...props);
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-// create a symbol identify the observable I add to
-// the component so it doesn't conflict with anything.
-// I need this so I'm able to add the desired behaviour to the component.
-const /** @type {?} */ destroy$ = Symbol('destroy$');
-/**
- * An operator that takes until destroy it takes a components this a parameter
- * returns a pipeable RxJS operator.
- */
-const /** @type {?} */ untilDestroy$1 = (component) => {
-    if (component[destroy$] === undefined) {
-        // only hookup each component once.
-        addDestroyObservableToComponent(component);
-    }
-    // pipe in the takeUntil destroy$ and return the source unaltered
-    return takeUntil(component[destroy$]);
-};
-/**
- * \@internal
- * @param {?} component
- * @return {?}
- */
-function addDestroyObservableToComponent(component) {
-    component[destroy$] = new Observable(observer => {
-        // keep track of the original destroy function,
-        // the user might do something in there
-        const /** @type {?} */ orignalDestroy = component.ngOnDestroy;
-        if (!orignalDestroy) {
-            // Angular does not support dynamic added destroy methods
-            // so make sure there is one.
-            throw new Error('untilDestroy operator needs the component to have an ngOnDestroy method');
-        }
-        // replace the ngOndestroy
-        component.ngOnDestroy = () => {
-            // fire off the destroy observable
-            observer.next();
-            // complete the observable
-            observer.complete();
-            // and at last, call the original destroy
-            orignalDestroy.call(component);
-        };
-        // return cleanup function.
-        return (_) => (component[destroy$] = undefined);
-    });
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
 class NgLetContext {
     constructor() {
         this.$implicit = null;
@@ -341,6 +273,77 @@ NgLetModule.ctorParameters = () => [];
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+/**
+ * @template T, V
+ * @param {...?} props
+ * @return {?}
+ */
+function pluck$1(...props) {
+    return pluck(...props);
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+// create a symbol identify the observable I add to
+// the component so it doesn't conflict with anything.
+// I need this so I'm able to add the desired behaviour to the component.
+const destroy$ = Symbol('destroy$');
+/**
+ * An operator that takes until destroy it takes a components this a parameter
+ * returns a pipeable RxJS operator.
+ */
+const untilDestroy = (component) => {
+    if (component[destroy$] === undefined) {
+        // only hookup each component once.
+        addDestroyObservableToComponent(component);
+    }
+    // pipe in the takeUntil destroy$ and return the source unaltered
+    return takeUntil(component[destroy$]);
+};
+/**
+ * \@internal
+ * @param {?} component
+ * @return {?}
+ */
+function addDestroyObservableToComponent(component) {
+    component[destroy$] = new Observable(observer => {
+        // keep track of the original destroy function,
+        // the user might do something in there
+        const /** @type {?} */ orignalDestroy = component.ngOnDestroy;
+        if (!orignalDestroy) {
+            // Angular does not support dynamic added destroy methods
+            // so make sure there is one.
+            throw new Error('untilDestroy operator needs the component to have an ngOnDestroy method');
+        }
+        // replace the ngOndestroy
+        component.ngOnDestroy = () => {
+            // fire off the destroy observable
+            observer.next();
+            // complete the observable
+            observer.complete();
+            // and at last, call the original destroy
+            orignalDestroy.call(component);
+        };
+        // return cleanup function.
+        return (_) => (component[destroy$] = undefined);
+    });
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @record
+ */
+
 class RouterLinkActiveMatch {
     /**
      * @param {?} router
@@ -469,6 +472,9 @@ RouterLinkActiveMatchModule.ctorParameters = () => [];
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+/**
+ * Generated bundle index. Do not edit.
+ */
 
-export { Select, Pluck, NgrxSelectModule, Dispatch, NgrxUtilsModule, untilDestroy$1 as untilDestroy, pluck$1 as pluck, NgLetDirective, NgLetModule, RouterLinkActiveMatchModule, RouterLinkActiveMatch, NgrxSelect as ɵa, NgLetContext as ɵb };
-//# sourceMappingURL=store.js.map
+export { NgrxSelectModule, NgrxUtilsModule, Pluck, Select, Dispatch, NgLetDirective, NgLetModule, RouterLinkActiveMatchModule, RouterLinkActiveMatch, pluck$1 as pluck, untilDestroy };
+//# sourceMappingURL=ngrx-utils-store.js.map
