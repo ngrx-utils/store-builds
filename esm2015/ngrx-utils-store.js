@@ -1,12 +1,8 @@
-import { NgModule, Injectable, SkipSelf, Optional, Directive, Input, TemplateRef, ViewContainerRef, Renderer2, ElementRef } from '@angular/core';
+import { NgModule, Injectable, SkipSelf, Optional, Directive, Input, TemplateRef, ViewContainerRef, ElementRef, Renderer2, ChangeDetectorRef, Pipe, WrappedValue, defineInjectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { pluck } from 'rxjs/operators/pluck';
-import { Observable } from 'rxjs/Observable';
-import { takeUntil } from 'rxjs/operators/takeUntil';
+import { pluck, takeUntil, filter, map } from 'rxjs/operators';
+import { Observable, combineLatest, Subject } from 'rxjs';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs/operators/filter';
-import { combineLatest } from 'rxjs/operators/combineLatest';
-import { Subject } from 'rxjs/Subject';
 
 /**
  * @fileoverview added by tsickle
@@ -27,10 +23,11 @@ class NgrxSelect {
  */
 NgrxSelect.store = undefined;
 NgrxSelect.decorators = [
-    { type: Injectable },
+    { type: Injectable, args: [{
+                providedIn: 'root'
+            },] },
 ];
-/** @nocollapse */
-NgrxSelect.ctorParameters = () => [];
+/** @nocollapse */ NgrxSelect.ngInjectableDef = defineInjectable({ factory: function NgrxSelect_Factory() { return new NgrxSelect(); }, token: NgrxSelect, providedIn: "root" });
 class NgrxSelectModule {
     /**
      * @param {?} ngrxSelect
@@ -45,9 +42,7 @@ class NgrxSelectModule {
     }
 }
 NgrxSelectModule.decorators = [
-    { type: NgModule, args: [{
-                providers: [NgrxSelect]
-            },] },
+    { type: NgModule },
 ];
 /** @nocollapse */
 NgrxSelectModule.ctorParameters = () => [
@@ -55,33 +50,15 @@ NgrxSelectModule.ctorParameters = () => [
     { type: Store, },
     { type: NgrxSelectModule, decorators: [{ type: SkipSelf }, { type: Optional },] },
 ];
-class NgrxUtilsModule {
-    /**
-     * @param {?} module
-     */
-    constructor(module) {
-        if (module) {
-            throw new Error('Only import NgrxUtilsModule to top level module like AppModule');
-        }
-    }
-}
-NgrxUtilsModule.decorators = [
-    { type: NgModule, args: [{
-                exports: [NgrxSelectModule]
-            },] },
-];
-/** @nocollapse */
-NgrxUtilsModule.ctorParameters = () => [
-    { type: NgrxUtilsModule, decorators: [{ type: SkipSelf }, { type: Optional },] },
-];
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
 /**
- * Provide an utility for select a piece of state from Root State.
- * Support shorthand syntax with 'dot' split property name and leave it empty
+ * \@whatItDoes Provide an utility for select a piece of state from Root State.
+ * \@howToUse `\@Pluck('state') state: Observable<any>`
+ * \@description Support shorthand syntax with 'dot' split property name and leave it empty
  * will use the component property name.
  * \@example
  * export class MyComponent {
@@ -96,7 +73,7 @@ NgrxUtilsModule.ctorParameters = () => [
 function Pluck(path, ...paths) {
     return function (target, propertyKey) {
         let /** @type {?} */ props;
-        if (!path) {
+        if (path === undefined || path === '') {
             path = propertyKey;
         }
         if (typeof path !== 'string') {
@@ -113,7 +90,7 @@ function Pluck(path, ...paths) {
                  */
                 get() {
                     const /** @type {?} */ source$ = NgrxSelect.store;
-                    if (!source$) {
+                    if (source$ === undefined) {
                         throw new Error('NgrxSelect not connected to store!');
                     }
                     return source$.pipe(pluck(...props));
@@ -159,7 +136,7 @@ function Select(mapFn, ...operations) {
                         throw new Error('NgrxSelect not connected to store!');
                     }
                     const /** @type {?} */ source$ = store.select(mapFn);
-                    return source$.pipe.apply(source$, operations);
+                    return source$.pipe(...operations);
                 } }));
         }
     };
@@ -170,13 +147,16 @@ function Select(mapFn, ...operations) {
  * @suppress {checkTypes} checked by tsc
  */
 /**
+ * \@whatItDoes Dispatch method returned action.
+ * \@howToUse `\@Dispatch() componentMethod() { return new Action() }`
  * @return {?}
  */
 function Dispatch() {
     return function (target, propertyKey, descriptor) {
-        const /** @type {?} */ originalMethod = descriptor.value;
+        const /** @type {?} */ originalMethod = /** @type {?} */ (descriptor.value);
         if (typeof originalMethod !== 'function') {
-            throw new TypeError(`Unexpected type ${typeof originalMethod} of property ${propertyKey}, expected 'function'`);
+            throw new TypeError(`Unexpected type ${typeof originalMethod} of property ${propertyKey}, ` +
+                `expected 'function'`);
         }
         // editing the descriptor/value parameter
         descriptor.value = function (...args) {
@@ -266,8 +246,6 @@ NgLetModule.decorators = [
                 exports: [NgLetDirective]
             },] },
 ];
-/** @nocollapse */
-NgLetModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle
@@ -312,7 +290,7 @@ function addDestroyObservableToComponent(component) {
         // keep track of the original destroy function,
         // the user might do something in there
         const /** @type {?} */ orignalDestroy = component.ngOnDestroy;
-        if (!orignalDestroy) {
+        if (orignalDestroy == null) {
             // Angular does not support dynamic added destroy methods
             // so make sure there is one.
             throw new Error('untilDestroy operator needs the component to have an ngOnDestroy method');
@@ -353,12 +331,10 @@ class RouterLinkActiveMatch {
     constructor(router, _renderer, _ngEl) {
         this._renderer = _renderer;
         this._ngEl = _ngEl;
-        this._curRoute = '';
-        this._matchExp = {};
         this._onChangesHook = new Subject();
-        router.events
-            .pipe(filter(e => e instanceof NavigationEnd), combineLatest(this._onChangesHook), untilDestroy(this))
-            .subscribe(([e]) => {
+        combineLatest(router.events, this._onChangesHook)
+            .pipe(map(([e]) => e), filter(e => e instanceof NavigationEnd), untilDestroy(this))
+            .subscribe(e => {
             this._curRoute = (/** @type {?} */ (e)).urlAfterRedirects;
             this._updateClass(this._matchExp);
         });
@@ -450,8 +426,137 @@ RouterLinkActiveMatchModule.decorators = [
                 exports: [RouterLinkActiveMatch]
             },] },
 ];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @record
+ */
+
+class ObservableStrategy {
+    /**
+     * @param {?} async
+     * @param {?} updateLatestValue
+     * @return {?}
+     */
+    createSubscription(async, updateLatestValue) {
+        return async.subscribe({
+            next: updateLatestValue,
+            error: (e) => {
+                throw e;
+            }
+        });
+    }
+    /**
+     * @param {?} subscription
+     * @return {?}
+     */
+    dispose(subscription) {
+        subscription.unsubscribe();
+    }
+    /**
+     * @param {?} subscription
+     * @return {?}
+     */
+    onDestroy(subscription) {
+        subscription.unsubscribe();
+    }
+}
+const _observableStrategy = new ObservableStrategy();
+class PushPipe {
+    /**
+     * @param {?} _ref
+     */
+    constructor(_ref) {
+        this._ref = _ref;
+        this._latestValue = null;
+        this._latestReturnedValue = null;
+        this._subscription = null;
+        this._obj = null;
+        this._strategy = _observableStrategy;
+    }
+    /**
+     * @param {?} obj
+     * @return {?}
+     */
+    transform(obj) {
+        if (this._obj === null) {
+            if (obj != null) {
+                this._subscribe(obj);
+            }
+            this._latestReturnedValue = this._latestValue;
+            return this._latestValue;
+        }
+        if (obj !== this._obj) {
+            this._dispose();
+            return this.transform(/** @type {?} */ (obj));
+        }
+        if (this._latestValue === this._latestReturnedValue) {
+            return this._latestReturnedValue;
+        }
+        this._latestReturnedValue = this._latestValue;
+        return WrappedValue.wrap(this._latestValue);
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        if (this._subscription !== null) {
+            this._dispose();
+        }
+    }
+    /**
+     * @param {?} obj
+     * @return {?}
+     */
+    _subscribe(obj) {
+        this._obj = obj;
+        this._subscription = this._strategy.createSubscription(obj, (value) => this._updateLatestValue(obj, value));
+    }
+    /**
+     * @return {?}
+     */
+    _dispose() {
+        this._strategy.dispose(/** @type {?} */ ((this._subscription)));
+        this._latestValue = null;
+        this._latestReturnedValue = null;
+        this._subscription = null;
+        this._obj = null;
+    }
+    /**
+     * @param {?} async
+     * @param {?} value
+     * @return {?}
+     */
+    _updateLatestValue(async, value) {
+        if (async === this._obj) {
+            this._latestValue = value;
+            this._ref.detectChanges();
+        }
+    }
+}
+PushPipe.decorators = [
+    { type: Pipe, args: [{ name: 'push', pure: false },] },
+];
 /** @nocollapse */
-RouterLinkActiveMatchModule.ctorParameters = () => [];
+PushPipe.ctorParameters = () => [
+    { type: ChangeDetectorRef, },
+];
+class PushPipeModule {
+}
+PushPipeModule.decorators = [
+    { type: NgModule, args: [{
+                exports: [PushPipe],
+                declarations: [PushPipe]
+            },] },
+];
 
 /**
  * @fileoverview added by tsickle
@@ -466,6 +571,9 @@ RouterLinkActiveMatchModule.ctorParameters = () => [];
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
+ */
+/*
+ * Public API Surface of ngrx-utils
  */
 
 /**
@@ -476,5 +584,5 @@ RouterLinkActiveMatchModule.ctorParameters = () => [];
  * Generated bundle index. Do not edit.
  */
 
-export { NgrxSelectModule, NgrxUtilsModule, Pluck, Select, Dispatch, NgLetDirective, NgLetModule, RouterLinkActiveMatchModule, RouterLinkActiveMatch, pluck$1 as pluck, untilDestroy };
+export { NgrxSelectModule, NgrxSelect as ɵNgrxSelect, Pluck, Select, Dispatch, NgLetDirective, NgLetModule, RouterLinkActiveMatchModule, RouterLinkActiveMatch, pluck$1 as pluck, untilDestroy, destroy$ as ɵdestroy$, PushPipe, PushPipeModule };
 //# sourceMappingURL=ngrx-utils-store.js.map

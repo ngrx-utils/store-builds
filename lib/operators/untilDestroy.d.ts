@@ -1,10 +1,10 @@
-import { Observable } from 'rxjs/Observable';
-export declare const destroy$: symbol;
+import { MonoTypeOperatorFunction } from 'rxjs';
+export declare const destroy$: unique symbol;
 /**
  * An operator that takes until destroy it takes a components this a parameter
  * returns a pipeable RxJS operator.
  */
-export declare const untilDestroy: <T>(component: any) => (source: Observable<T>) => Observable<T>;
+export declare const untilDestroy: <T>(component: any) => MonoTypeOperatorFunction<T>;
 /**
  * @internal
  */

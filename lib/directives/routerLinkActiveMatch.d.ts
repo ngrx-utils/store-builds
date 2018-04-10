@@ -1,4 +1,4 @@
-import { OnDestroy, Renderer2, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
+import { ElementRef, OnChanges, OnDestroy, Renderer2, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 export interface MatchExp {
     [classes: string]: string;

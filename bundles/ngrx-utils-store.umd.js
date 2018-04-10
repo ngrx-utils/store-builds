@@ -1,8 +1,8 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@ngrx/store'), require('rxjs/operators/pluck'), require('rxjs/Observable'), require('rxjs/operators/takeUntil'), require('@angular/router'), require('rxjs/operators/filter'), require('rxjs/operators/combineLatest'), require('rxjs/Subject')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@ngrx/store', 'rxjs/operators/pluck', 'rxjs/Observable', 'rxjs/operators/takeUntil', '@angular/router', 'rxjs/operators/filter', 'rxjs/operators/combineLatest', 'rxjs/Subject'], factory) :
-	(factory((global['ngrx-utils'] = global['ngrx-utils'] || {}, global['ngrx-utils'].store = {}),global.ng.core,global.ngrx.store,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable.prototype,global.ng.router,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx));
-}(this, (function (exports,core,store,pluck,Observable,takeUntil,router,filter,combineLatest,Subject) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@ngrx/store'), require('rxjs/operators'), require('rxjs'), require('@angular/router')) :
+	typeof define === 'function' && define.amd ? define('@ngrx-utils/store', ['exports', '@angular/core', '@ngrx/store', 'rxjs/operators', 'rxjs', '@angular/router'], factory) :
+	(factory((global['ngrx-utils'] = global['ngrx-utils'] || {}, global['ngrx-utils'].store = {}),global.ng.core,global.ngrx.store,global.Rx.Observable.prototype,global.rxjs,global.ng.router));
+}(this, (function (exports,core,store,operators,rxjs,router) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -59,9 +59,11 @@ var NgrxSelect = /** @class */ (function () {
 }());
 NgrxSelect.store = undefined;
 NgrxSelect.decorators = [
-    { type: core.Injectable },
+    { type: core.Injectable, args: [{
+                providedIn: 'root'
+            },] },
 ];
-NgrxSelect.ctorParameters = function () { return []; };
+NgrxSelect.ngInjectableDef = core.defineInjectable({ factory: function NgrxSelect_Factory() { return new NgrxSelect(); }, token: NgrxSelect, providedIn: "root" });
 var NgrxSelectModule = /** @class */ (function () {
     function NgrxSelectModule(ngrxSelect, store$$1, module) {
         if (module) {
@@ -72,30 +74,12 @@ var NgrxSelectModule = /** @class */ (function () {
     return NgrxSelectModule;
 }());
 NgrxSelectModule.decorators = [
-    { type: core.NgModule, args: [{
-                providers: [NgrxSelect]
-            },] },
+    { type: core.NgModule },
 ];
 NgrxSelectModule.ctorParameters = function () { return [
     { type: NgrxSelect, },
     { type: store.Store, },
     { type: NgrxSelectModule, decorators: [{ type: core.SkipSelf }, { type: core.Optional },] },
-]; };
-var NgrxUtilsModule = /** @class */ (function () {
-    function NgrxUtilsModule(module) {
-        if (module) {
-            throw new Error('Only import NgrxUtilsModule to top level module like AppModule');
-        }
-    }
-    return NgrxUtilsModule;
-}());
-NgrxUtilsModule.decorators = [
-    { type: core.NgModule, args: [{
-                exports: [NgrxSelectModule]
-            },] },
-];
-NgrxUtilsModule.ctorParameters = function () { return [
-    { type: NgrxUtilsModule, decorators: [{ type: core.SkipSelf }, { type: core.Optional },] },
 ]; };
 function Pluck(path) {
     var paths = [];
@@ -104,7 +88,7 @@ function Pluck(path) {
     }
     return function (target, propertyKey) {
         var props;
-        if (!path) {
+        if (path === undefined || path === '') {
             path = propertyKey;
         }
         if (typeof path !== 'string') {
@@ -116,10 +100,10 @@ function Pluck(path) {
             Object.defineProperty(target, propertyKey, Object.assign({}, descriptor, {
                 get: function () {
                     var source$ = NgrxSelect.store;
-                    if (!source$) {
+                    if (source$ === undefined) {
                         throw new Error('NgrxSelect not connected to store!');
                     }
-                    return source$.pipe(pluck.pluck.apply(void 0, __spread(props)));
+                    return source$.pipe(operators.pluck.apply(void 0, __spread(props)));
                 }
             }));
         }
@@ -143,7 +127,7 @@ function Select(mapFn) {
                         throw new Error('NgrxSelect not connected to store!');
                     }
                     var source$ = store$$1.select(mapFn);
-                    return source$.pipe.apply(source$, operations);
+                    return source$.pipe.apply(source$, __spread(operations));
                 }
             }));
         }
@@ -151,9 +135,10 @@ function Select(mapFn) {
 }
 function Dispatch() {
     return function (target, propertyKey, descriptor) {
-        var originalMethod = descriptor.value;
+        var originalMethod = (descriptor.value);
         if (typeof originalMethod !== 'function') {
-            throw new TypeError("Unexpected type " + typeof originalMethod + " of property " + propertyKey + ", expected 'function'");
+            throw new TypeError("Unexpected type " + typeof originalMethod + " of property " + propertyKey + ", " +
+                "expected 'function'");
         }
         descriptor.value = function () {
             var args = [];
@@ -228,25 +213,24 @@ NgLetModule.decorators = [
                 exports: [NgLetDirective]
             },] },
 ];
-NgLetModule.ctorParameters = function () { return []; };
 function pluck$1() {
     var props = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         props[_i] = arguments[_i];
     }
-    return pluck.pluck.apply(void 0, __spread(props));
+    return operators.pluck.apply(void 0, __spread(props));
 }
 var destroy$ = Symbol('destroy$');
 var untilDestroy = function (component) {
     if (component[destroy$] === undefined) {
         addDestroyObservableToComponent(component);
     }
-    return takeUntil.takeUntil(component[destroy$]);
+    return operators.takeUntil(component[destroy$]);
 };
 function addDestroyObservableToComponent(component) {
-    component[destroy$] = new Observable.Observable(function (observer) {
+    component[destroy$] = new rxjs.Observable(function (observer) {
         var orignalDestroy = component.ngOnDestroy;
-        if (!orignalDestroy) {
+        if (orignalDestroy == null) {
             throw new Error('untilDestroy operator needs the component to have an ngOnDestroy method');
         }
         component.ngOnDestroy = function () {
@@ -262,13 +246,13 @@ var RouterLinkActiveMatch = /** @class */ (function () {
         var _this = this;
         this._renderer = _renderer;
         this._ngEl = _ngEl;
-        this._curRoute = '';
-        this._matchExp = {};
-        this._onChangesHook = new Subject.Subject();
-        router$$1.events
-            .pipe(filter.filter(function (e) { return e instanceof router.NavigationEnd; }), combineLatest.combineLatest(this._onChangesHook), untilDestroy(this))
-            .subscribe(function (_a) {
+        this._onChangesHook = new rxjs.Subject();
+        rxjs.combineLatest(router$$1.events, this._onChangesHook)
+            .pipe(operators.map(function (_a) {
             var _b = __read(_a, 1), e = _b[0];
+            return e;
+        }), operators.filter(function (e) { return e instanceof router.NavigationEnd; }), untilDestroy(this))
+            .subscribe(function (e) {
             _this._curRoute = ((e)).urlAfterRedirects;
             _this._updateClass(_this._matchExp);
         });
@@ -349,10 +333,98 @@ RouterLinkActiveMatchModule.decorators = [
                 exports: [RouterLinkActiveMatch]
             },] },
 ];
-RouterLinkActiveMatchModule.ctorParameters = function () { return []; };
+var ObservableStrategy = /** @class */ (function () {
+    function ObservableStrategy() {
+    }
+    ObservableStrategy.prototype.createSubscription = function (async, updateLatestValue) {
+        return async.subscribe({
+            next: updateLatestValue,
+            error: function (e) {
+                throw e;
+            }
+        });
+    };
+    ObservableStrategy.prototype.dispose = function (subscription) {
+        subscription.unsubscribe();
+    };
+    ObservableStrategy.prototype.onDestroy = function (subscription) {
+        subscription.unsubscribe();
+    };
+    return ObservableStrategy;
+}());
+var _observableStrategy = new ObservableStrategy();
+var PushPipe = /** @class */ (function () {
+    function PushPipe(_ref) {
+        this._ref = _ref;
+        this._latestValue = null;
+        this._latestReturnedValue = null;
+        this._subscription = null;
+        this._obj = null;
+        this._strategy = _observableStrategy;
+    }
+    PushPipe.prototype.transform = function (obj) {
+        if (this._obj === null) {
+            if (obj != null) {
+                this._subscribe(obj);
+            }
+            this._latestReturnedValue = this._latestValue;
+            return this._latestValue;
+        }
+        if (obj !== this._obj) {
+            this._dispose();
+            return this.transform((obj));
+        }
+        if (this._latestValue === this._latestReturnedValue) {
+            return this._latestReturnedValue;
+        }
+        this._latestReturnedValue = this._latestValue;
+        return core.WrappedValue.wrap(this._latestValue);
+    };
+    PushPipe.prototype.ngOnDestroy = function () {
+        if (this._subscription !== null) {
+            this._dispose();
+        }
+    };
+    PushPipe.prototype._subscribe = function (obj) {
+        var _this = this;
+        this._obj = obj;
+        this._subscription = this._strategy.createSubscription(obj, function (value) { return _this._updateLatestValue(obj, value); });
+    };
+    PushPipe.prototype._dispose = function () {
+        this._strategy.dispose(((this._subscription)));
+        this._latestValue = null;
+        this._latestReturnedValue = null;
+        this._subscription = null;
+        this._obj = null;
+    };
+    PushPipe.prototype._updateLatestValue = function (async, value) {
+        if (async === this._obj) {
+            this._latestValue = value;
+            this._ref.detectChanges();
+        }
+    };
+    return PushPipe;
+}());
+PushPipe.decorators = [
+    { type: core.Pipe, args: [{ name: 'push', pure: false },] },
+];
+PushPipe.ctorParameters = function () { return [
+    { type: core.ChangeDetectorRef, },
+]; };
+var PushPipeModule = /** @class */ (function () {
+    function PushPipeModule() {
+    }
+    return PushPipeModule;
+}());
+PushPipeModule.decorators = [
+    { type: core.NgModule, args: [{
+                exports: [PushPipe],
+                declarations: [PushPipe]
+            },] },
+];
 
 exports.NgrxSelectModule = NgrxSelectModule;
-exports.NgrxUtilsModule = NgrxUtilsModule;
+exports.ɵNgrxSelect = NgrxSelect;
 exports.Pluck = Pluck;
 exports.Select = Select;
 exports.Dispatch = Dispatch;
@@ -362,6 +434,9 @@ exports.RouterLinkActiveMatchModule = RouterLinkActiveMatchModule;
 exports.RouterLinkActiveMatch = RouterLinkActiveMatch;
 exports.pluck = pluck$1;
 exports.untilDestroy = untilDestroy;
+exports.ɵdestroy$ = destroy$;
+exports.PushPipe = PushPipe;
+exports.PushPipeModule = PushPipeModule;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

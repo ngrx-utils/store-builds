@@ -1,5 +1,5 @@
 import { Selector } from '@ngrx/store';
-import { OperatorFunction } from 'rxjs/interfaces';
+import { OperatorFunction } from 'rxjs';
 export declare function Select<A, B>(mapFn: Selector<A, B>): (target: any, name: string) => void;
 export declare function Select<A, B, C>(mapFn: Selector<A, B>, op1: OperatorFunction<B, C>): (target: any, name: string) => void;
 export declare function Select<A, B, C, D>(mapFn: Selector<A, B>, op1: OperatorFunction<B, C>, op2: OperatorFunction<C, D>): (target: any, name: string) => void;

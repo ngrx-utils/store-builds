@@ -1,6 +1,7 @@
 /**
- * Provide an utility for select a piece of state from Root State.
- * Support shorthand syntax with 'dot' split property name and leave it empty
+ * @whatItDoes Provide an utility for select a piece of state from Root State.
+ * @howToUse `@Pluck('state') state: Observable<any>`
+ * @description Support shorthand syntax with 'dot' split property name and leave it empty
  * will use the component property name.
  * @example
  * export class MyComponent {
