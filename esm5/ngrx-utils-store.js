@@ -1,5 +1,5 @@
 import { __spread, __read } from 'tslib';
-import { NgModule, Injectable, SkipSelf, Optional, Directive, Input, TemplateRef, ViewContainerRef, ElementRef, Renderer2, ChangeDetectorRef, Pipe, WrappedValue, defineInjectable } from '@angular/core';
+import { NgModule, Injectable, SkipSelf, Optional, Directive, Input, TemplateRef, ViewContainerRef, ElementRef, Renderer2, ChangeDetectorRef, Pipe, WrappedValue } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { pluck, takeUntil, filter, map } from 'rxjs/operators';
 import { Observable, combineLatest, Subject } from 'rxjs';
@@ -15,11 +15,8 @@ var NgrxSelect = /** @class */ (function () {
 }());
 NgrxSelect.store = undefined;
 NgrxSelect.decorators = [
-    { type: Injectable, args: [{
-                providedIn: 'root'
-            },] },
+    { type: Injectable },
 ];
-NgrxSelect.ngInjectableDef = defineInjectable({ factory: function NgrxSelect_Factory() { return new NgrxSelect(); }, token: NgrxSelect, providedIn: "root" });
 var NgrxSelectModule = /** @class */ (function () {
     function NgrxSelectModule(ngrxSelect, store, module) {
         if (module) {
@@ -30,7 +27,9 @@ var NgrxSelectModule = /** @class */ (function () {
     return NgrxSelectModule;
 }());
 NgrxSelectModule.decorators = [
-    { type: NgModule },
+    { type: NgModule, args: [{
+                providers: [NgrxSelect]
+            },] },
 ];
 NgrxSelectModule.ctorParameters = function () { return [
     { type: NgrxSelect, },

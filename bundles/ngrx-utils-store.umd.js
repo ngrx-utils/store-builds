@@ -59,11 +59,8 @@ var NgrxSelect = /** @class */ (function () {
 }());
 NgrxSelect.store = undefined;
 NgrxSelect.decorators = [
-    { type: core.Injectable, args: [{
-                providedIn: 'root'
-            },] },
+    { type: core.Injectable },
 ];
-NgrxSelect.ngInjectableDef = core.defineInjectable({ factory: function NgrxSelect_Factory() { return new NgrxSelect(); }, token: NgrxSelect, providedIn: "root" });
 var NgrxSelectModule = /** @class */ (function () {
     function NgrxSelectModule(ngrxSelect, store$$1, module) {
         if (module) {
@@ -74,7 +71,9 @@ var NgrxSelectModule = /** @class */ (function () {
     return NgrxSelectModule;
 }());
 NgrxSelectModule.decorators = [
-    { type: core.NgModule },
+    { type: core.NgModule, args: [{
+                providers: [NgrxSelect]
+            },] },
 ];
 NgrxSelectModule.ctorParameters = function () { return [
     { type: NgrxSelect, },
