@@ -1,1 +1,1 @@
-{"__symbolic":"module","version":4,"exports":[{"from":"./lib/pipes"}],"metadata":{},"origins":{},"importAs":"@ngrx-utils/store"}
+{"__symbolic":"module","version":4,"exports":[{"from":"./src/pipes"}],"metadata":{},"origins":{},"importAs":"@ngrx-utils/store"}

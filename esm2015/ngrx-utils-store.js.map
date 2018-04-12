@@ -2,15 +2,15 @@
   "version": 3,
   "file": "ngrx-utils-store.js",
   "sources": [
-    "ng://@ngrx-utils/store/out/lib/pipes/push.ts",
-    "ng://@ngrx-utils/store/out/lib/directives/routerLinkActiveMatch.ts",
-    "ng://@ngrx-utils/store/out/lib/operators/untilDestroy.ts",
-    "ng://@ngrx-utils/store/out/lib/operators/pluck.ts",
-    "ng://@ngrx-utils/store/out/lib/directives/ngLet.ts",
-    "ng://@ngrx-utils/store/out/lib/decorators/dispatch.ts",
-    "ng://@ngrx-utils/store/out/lib/decorators/select.ts",
-    "ng://@ngrx-utils/store/out/lib/decorators/pluck.ts",
-    "ng://@ngrx-utils/store/out/lib/decorators/ngrx-select.module.ts"
+    "ng://@ngrx-utils/store/out/src/pipes/push.ts",
+    "ng://@ngrx-utils/store/out/src/directives/routerLinkActiveMatch.ts",
+    "ng://@ngrx-utils/store/out/src/operators/untilDestroy.ts",
+    "ng://@ngrx-utils/store/out/src/operators/pluck.ts",
+    "ng://@ngrx-utils/store/out/src/directives/ngLet.ts",
+    "ng://@ngrx-utils/store/out/src/decorators/dispatch.ts",
+    "ng://@ngrx-utils/store/out/src/decorators/select.ts",
+    "ng://@ngrx-utils/store/out/src/decorators/pluck.ts",
+    "ng://@ngrx-utils/store/out/src/decorators/ngrx-select.module.ts"
   ],
   "sourcesContent": [
     "import {\n  ChangeDetectorRef,\n  EventEmitter,\n  NgModule,\n  OnDestroy,\n  Pipe,\n  PipeTransform,\n  WrappedValue\n} from '@angular/core';\nimport { Observable, SubscriptionLike } from 'rxjs';\n\nexport interface SubscriptionStrategy {\n  createSubscription(async: Observable<any>, updateLatestValue: any): SubscriptionLike;\n  dispose(subscription: SubscriptionLike): void;\n  onDestroy(subscription: SubscriptionLike): void;\n}\n\nexport class ObservableStrategy implements SubscriptionStrategy {\n  createSubscription(async: Observable<any>, updateLatestValue: any): SubscriptionLike {\n    return async.subscribe({\n      next: updateLatestValue,\n      error: (e: any) => {\n        throw e;\n      }\n    });\n  }\n\n  dispose(subscription: SubscriptionLike): void {\n    subscription.unsubscribe();\n  }\n\n  onDestroy(subscription: SubscriptionLike): void {\n    subscription.unsubscribe();\n  }\n}\n\nexport const _observableStrategy = new ObservableStrategy();\n\n@Pipe({ name: 'push', pure: false })\nexport class PushPipe implements PipeTransform, OnDestroy {\n  private _latestValue: any = null;\n  private _latestReturnedValue: any = null;\n\n  private _subscription: SubscriptionLike | null = null;\n  private _obj: Observable<any> | EventEmitter<any> | null = null;\n  private _strategy: SubscriptionStrategy = _observableStrategy;\n\n  constructor(private _ref: ChangeDetectorRef) {}\n\n  transform<T>(obj: null): null;\n  transform<T>(obj: undefined): undefined;\n  transform<T>(obj: Observable<T> | null | undefined): T | null;\n  transform(obj: Observable<any> | null | undefined): any {\n    if (this._obj === null) {\n      if (obj != null) {\n        this._subscribe(obj);\n      }\n      this._latestReturnedValue = this._latestValue;\n      return this._latestValue;\n    }\n\n    if (obj !== this._obj) {\n      this._dispose();\n      return this.transform(obj as any);\n    }\n\n    if (this._latestValue === this._latestReturnedValue) {\n      return this._latestReturnedValue;\n    }\n\n    this._latestReturnedValue = this._latestValue;\n    return WrappedValue.wrap(this._latestValue);\n  }\n\n  ngOnDestroy() {\n    if (this._subscription !== null) {\n      this._dispose();\n    }\n  }\n\n  private _subscribe(obj: Observable<any> | EventEmitter<any>): void {\n    this._obj = obj;\n    this._subscription = this._strategy.createSubscription(obj, (value: Object) =>\n      this._updateLatestValue(obj, value)\n    );\n  }\n\n  private _dispose(): void {\n    this._strategy.dispose(this._subscription!);\n    this._latestValue = null;\n    this._latestReturnedValue = null;\n    this._subscription = null;\n    this._obj = null;\n  }\n\n  private _updateLatestValue(async: any, value: Object): void {\n    if (async === this._obj) {\n      this._latestValue = value;\n      this._ref.detectChanges();\n    }\n  }\n}\n\n@NgModule({\n  exports: [PushPipe],\n  declarations: [PushPipe]\n})\nexport class PushPipeModule {}\n",
