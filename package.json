@@ -1,11 +1,15 @@
 {
   "name": "@ngrx-utils/store",
-  "version": "0.11.0-beta.1",
+  "version": "0.11.0",
+  "description": "Utils Library for Angular and Ngrx",
   "peerDependencies": {
-    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
-    "@angular/core": "^6.0.0-rc.0 || ^6.0.0",
-    "@ngrx/store": "^6.0.0-beta.0",
-    "rxjs": "^6.0.0-rc.0"
+    "@angular/common": "NG_VERSION",
+    "@angular/core": "NG_VERSION",
+    "@ngrx/store": "NGRX_VERSION",
+    "rxjs": "RXJS_VERSION"
+  },
+  "ng-update": {
+    "packageGroup": "NG_UPDATE_PACKAGE_GROUP"
   },
   "repository": {
     "type": "git",
@@ -30,11 +34,15 @@
   },
   "sideEffects": false,
   "main": "bundles/ngrx-utils-store.umd.js",
-  "module": "esm5/ngrx-utils-store.js",
-  "es2015": "esm2015/ngrx-utils-store.js",
+  "module": "fesm5/ngrx-utils-store.js",
+  "es2015": "fesm2015/ngrx-utils-store.js",
+  "esm5": "esm5/ngrx-utils-store.js",
+  "esm2015": "esm2015/ngrx-utils-store.js",
+  "fesm5": "fesm5/ngrx-utils-store.js",
+  "fesm2015": "fesm2015/ngrx-utils-store.js",
   "typings": "ngrx-utils-store.d.ts",
   "metadata": "ngrx-utils-store.metadata.json",
   "dependencies": {
-    "tslib": "^1.7.1"
+    "tslib": "^1.9.0"
   }
 }

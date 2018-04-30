@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "ngLet.js",
+  "sources": [
+    "ng://@ngrx-utils/store/projects/store/src/directives/ngLet.ts"
+  ],
+  "sourcesContent": [
+    "import { NgModule, Directive, Input, TemplateRef, ViewContainerRef, OnInit } from '@angular/core';\n\nexport class NgLetContext {\n  $implicit: any = null;\n  ngLet: any = null;\n}\n\n@Directive({\n  selector: '[ngLet]'\n})\nexport class NgLetDirective implements OnInit {\n  private _context = new NgLetContext();\n\n  @Input()\n  set ngLet(value: any) {\n    this._context.$implicit = this._context.ngLet = value;\n  }\n\n  constructor(private _vcr: ViewContainerRef, private _templateRef: TemplateRef<NgLetContext>) {}\n\n  ngOnInit() {\n    this._vcr.createEmbeddedView(this._templateRef, this._context);\n  }\n}\n\n@NgModule({\n  declarations: [NgLetDirective],\n  exports: [NgLetDirective]\n})\nexport class NgLetModule {}\n"
+  ],
+  "names": [],
+  "mappings": ";;;;AAAA,OAAO,EAAE,QAAQ,EAAE,SAAS,EAAE,KAAK,EAAE,WAAW,EAAE,gBAAgB,EAAU,MAAM,eAAe,CAAC;AAElG,MAAM;;yBACa,IAAI;qBACR,IAAI;;CAClB;;;;;;;AAKD,MAAM;;;;;IAQJ,YAAoB,IAAsB,EAAU,YAAuC;QAAvE,SAAI,GAAJ,IAAI,CAAkB;QAAU,iBAAY,GAAZ,YAAY,CAA2B;wBAPxE,IAAI,YAAY,EAAE;KAO0D;;;;;QAJ3F,KAAK,CAAC,KAAU;QAClB,IAAI,CAAC,QAAQ,CAAC,SAAS,GAAG,IAAI,CAAC,QAAQ,CAAC,KAAK,GAAG,KAAK,CAAC;;;;;IAKxD,QAAQ;QACN,IAAI,CAAC,IAAI,CAAC,kBAAkB,CAAC,IAAI,CAAC,YAAY,EAAE,IAAI,CAAC,QAAQ,CAAC,CAAC;KAChE;;;YAfF,SAAS,SAAC;gBACT,QAAQ,EAAE,SAAS;aACpB;;;;YATiD,gBAAgB;YAA7B,WAAW;;;sBAa7C,KAAK;;;;;;;;;;;;;;;;;;;AAgBR,MAAM;;;YAJL,QAAQ,SAAC;gBACR,YAAY,EAAE,CAAC,cAAc,CAAC;gBAC9B,OAAO,EAAE,CAAC,cAAc,CAAC;aAC1B"
+}

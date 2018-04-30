@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "index.js",
+  "sources": [
+    "ng://@ngrx-utils/store/projects/store/src/decorators/index.ts"
+  ],
+  "sourcesContent": [
+    "export * from './dispatch';\nexport { NgrxSelectModule, NgrxSelect as ɵNgrxSelect } from './ngrx-select';\nexport * from './pluck';\nexport * from './select';\n"
+  ],
+  "names": [],
+  "mappings": ";;;;AAAA,mCAAc,YAAY,CAAC;AAC3B,OAAO,EAAE,gBAAgB,EAAE,UAAU,IAAI,WAAW,EAAE,MAAM,eAAe,CAAC;AAC5E,sBAAc,SAAS,CAAC;AACxB,uBAAc,UAAU,CAAC"
+}

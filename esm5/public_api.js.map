@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "public_api.js",
+  "sources": [
+    "ng://@ngrx-utils/store/projects/store/public_api.ts"
+  ],
+  "sourcesContent": [
+    "/*\n * Public API Surface of ngrx-utils\n */\n\nexport * from './src/store';\n"
+  ],
+  "names": [],
+  "mappings": ";;;;;;;AAIA,wPAAc,aAAa,CAAC"
+}

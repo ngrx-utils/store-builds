@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "index.js",
+  "sources": [
+    "ng://@ngrx-utils/store/projects/store/src/operators/index.ts"
+  ],
+  "sourcesContent": [
+    "export { untilDestroy, destroy$ as ɵdestroy$ } from './untilDestroy';\nexport * from './pluck';\n"
+  ],
+  "names": [],
+  "mappings": ";;;;AAAA,OAAO,EAAE,YAAY,EAAE,QAAQ,IAAI,SAAS,EAAE,MAAM,gBAAgB,CAAC;AACrE,sBAAc,SAAS,CAAC"
+}

@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "index.js",
+  "sources": [
+    "ng://@ngrx-utils/store/projects/store/src/directives/index.ts"
+  ],
+  "sourcesContent": [
+    "export * from './ngLet';\nexport * from './routerLinkMatch';\n"
+  ],
+  "names": [],
+  "mappings": ";;;;AAAA,0DAAc,SAAS,CAAC;AACxB,uDAAc,mBAAmB,CAAC"
+}

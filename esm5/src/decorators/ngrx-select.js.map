@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "ngrx-select.js",
+  "sources": [
+    "ng://@ngrx-utils/store/projects/store/src/decorators/ngrx-select.ts"
+  ],
+  "sourcesContent": [
+    "import { Injectable, NgModule } from '@angular/core';\nimport { Store } from '@ngrx/store';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class NgrxSelect {\n  static store: Store<any> | null = null;\n\n  connect(store: Store<any>) {\n    NgrxSelect.store = store;\n  }\n}\n\n@NgModule()\nexport class NgrxSelectModule {\n  constructor(ngrxSelect: NgrxSelect, store: Store<any>) {\n    if (NgrxSelect.store === null) {\n      ngrxSelect.connect(store);\n    }\n  }\n}\n"
+  ],
+  "names": [],
+  "mappings": ";;;;AAAA,OAAO,EAAE,UAAU,EAAE,QAAQ,EAAE,MAAM,eAAe,CAAC;AACrD,OAAO,EAAE,KAAK,EAAE,MAAM,aAAa,CAAC;;AAKpC,MAAM;;;;;IAGJ,OAAO,CAAC,KAAiB;QACvB,UAAU,CAAC,KAAK,GAAG,KAAK,CAAC;KAC1B;;mBAJiC,IAAI;;YAJvC,UAAU,SAAC;gBACV,UAAU,EAAE,MAAM;aACnB;;;;;;;;;;;;;;AAUD,MAAM;;;;;IACJ,YAAY,UAAsB,EAAE,KAAiB;QACnD,EAAE,CAAC,CAAC,UAAU,CAAC,KAAK,KAAK,IAAI,CAAC,CAAC,CAAC;YAC9B,UAAU,CAAC,OAAO,CAAC,KAAK,CAAC,CAAC;SAC3B;KACF;;;YANF,QAAQ;;;;YARI,UAAU;YALd,KAAK"
+}

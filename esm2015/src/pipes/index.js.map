@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "index.js",
+  "sources": [
+    "ng://@ngrx-utils/store/projects/store/src/pipes/index.ts"
+  ],
+  "sourcesContent": [
+    "export * from './push';\n"
+  ],
+  "names": [],
+  "mappings": ";;;;AAAA,mEAAc,QAAQ,CAAC"
+}

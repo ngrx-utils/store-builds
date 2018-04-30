@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "store.js",
+  "sources": [
+    "ng://@ngrx-utils/store/projects/store/src/store.ts"
+  ],
+  "sourcesContent": [
+    "export * from './decorators/index';\nexport * from './directives/index';\nexport * from './operators/index';\nexport * from './pipes/index';\n"
+  ],
+  "names": [],
+  "mappings": ";;;;AAAA,iFAAc,oBAAoB,CAAC;AACnC,kGAAc,oBAAoB,CAAC;AACnC,+CAAc,mBAAmB,CAAC;AAClC,mEAAc,eAAe,CAAC"
+}

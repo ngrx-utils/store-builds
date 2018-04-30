@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "pluck.js",
+  "sources": [
+    "ng://@ngrx-utils/store/projects/store/src/operators/pluck.ts"
+  ],
+  "sourcesContent": [
+    "import { OperatorFunction } from 'rxjs';\nimport { pluck as plucker } from 'rxjs/operators';\n\n/**\n * Strong typed pluck function to replace\n * rxjs/operators/pluck\n *\n * Accept max 4 properties name\n */\nexport function pluck<A, B extends keyof A>(s1: B): OperatorFunction<A, A[B]>;\nexport function pluck<A, B extends keyof A, C extends keyof A[B]>(\n  s1: B,\n  s2: C\n): OperatorFunction<A, A[B][C]>;\nexport function pluck<A, B extends keyof A, C extends keyof A[B], D extends keyof A[B][C]>(\n  s1: B,\n  s2: C,\n  s3: D\n): OperatorFunction<A, A[B][C][D]>;\nexport function pluck<\n  A,\n  B extends keyof A,\n  C extends keyof A[B],\n  D extends keyof A[B][C],\n  E extends keyof A[B][C][D]\n>(s1: B, s2: C, s3: D, s4: E): OperatorFunction<A, A[B][C][D][E]>;\nexport function pluck<\n  A,\n  B extends keyof A,\n  C extends keyof A[B],\n  D extends keyof A[B][C],\n  E extends keyof A[B][C][D],\n  F extends keyof A[B][C][D][E]\n>(s1: B, s2: C, s3: D, s4: E, s5: F): OperatorFunction<A, A[B][C][D][E][F]>;\nexport function pluck<\n  A,\n  B extends keyof A,\n  C extends keyof A[B],\n  D extends keyof A[B][C],\n  E extends keyof A[B][C][D],\n  F extends keyof A[B][C][D][E],\n  G extends keyof A[B][C][D][E][F]\n>(s1: B, s2: C, s3: D, s4: E, s5: F, s6: G): OperatorFunction<A, A[B][C][D][E][F][G]>;\nexport function pluck<T, V>(...props: string[]): OperatorFunction<T, V>;\nexport function pluck<T, V>(...props: string[]): OperatorFunction<T, V> {\n  return plucker<T, V>(...props);\n}\n"
+  ],
+  "names": [],
+  "mappings": ";;;;AACA,OAAO,EAAE,KAAK,IAAI,OAAO,EAAE,MAAM,gBAAgB,CAAC;;;;;;AA2ClD,MAAM,gBAAsB,GAAG,KAAe;IAC5C,MAAM,CAAC,OAAO,CAAO,GAAG,KAAK,CAAC,CAAC;CAChC"
+}
