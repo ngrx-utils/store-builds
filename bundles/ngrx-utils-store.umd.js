@@ -483,13 +483,6 @@
         ObservableStrategy.prototype.dispose = function (subscription) {
             subscription.unsubscribe();
         };
-        /**
-         * @param {?} subscription
-         * @return {?}
-         */
-        ObservableStrategy.prototype.onDestroy = function (subscription) {
-            subscription.unsubscribe();
-        };
         return ObservableStrategy;
     }());
     var PromiseStrategy = (function () {
@@ -510,11 +503,6 @@
          * @return {?}
          */
         PromiseStrategy.prototype.dispose = function (subscription) { };
-        /**
-         * @param {?} subscription
-         * @return {?}
-         */
-        PromiseStrategy.prototype.onDestroy = function (subscription) { };
         return PromiseStrategy;
     }());
     var /** @type {?} */ _promiseStrategy = new PromiseStrategy();

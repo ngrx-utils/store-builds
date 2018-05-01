@@ -21,8 +21,6 @@ function SubscriptionStrategy_tsickle_Closure_declarations() {
     SubscriptionStrategy.prototype.createSubscription;
     /** @type {?} */
     SubscriptionStrategy.prototype.dispose;
-    /** @type {?} */
-    SubscriptionStrategy.prototype.onDestroy;
 }
 class ObservableStrategy {
     /**
@@ -45,13 +43,6 @@ class ObservableStrategy {
     dispose(subscription) {
         subscription.unsubscribe();
     }
-    /**
-     * @param {?} subscription
-     * @return {?}
-     */
-    onDestroy(subscription) {
-        subscription.unsubscribe();
-    }
 }
 class PromiseStrategy {
     /**
@@ -69,11 +60,6 @@ class PromiseStrategy {
      * @return {?}
      */
     dispose(subscription) { }
-    /**
-     * @param {?} subscription
-     * @return {?}
-     */
-    onDestroy(subscription) { }
 }
 const /** @type {?} */ _promiseStrategy = new PromiseStrategy();
 const /** @type {?} */ _observableStrategy = new ObservableStrategy();
